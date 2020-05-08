@@ -7,7 +7,7 @@ Public Class ActiveDirectory
     Private main As DirectoryEntry
     Private mForm As Form1
     Private isLoad As Boolean = True
-    Private cancelToken As New Threading.CancellationTokenSource()
+    Private cancelToken As Threading.CancellationTokenSource
 
     Public conErr As Boolean
     Public displayName As String
@@ -57,7 +57,7 @@ Public Class ActiveDirectory
     End Function
 
     Public Sub Disconnect()
-        If isLoading() Then
+        If isLoading() AndAlso cancelToken IsNot Nothing Then
             cancelToken.Cancel()
         End If
 
@@ -104,11 +104,11 @@ Public Class ActiveDirectory
         Try
             Dim o As Object = main.NativeObject
 
-            If GroupList.Count + UserList.Count = 0 Then
-                Return False
-            Else
-                Return True
-            End If
+            'If GroupList.Count + UserList.Count = 0 Then
+            'Return False
+            'Else
+            Return True
+            'End If
         Catch ex As Exception
             Return False
         End Try
@@ -122,11 +122,15 @@ Public Class ActiveDirectory
         Try
             RefreshBuiltInSecurityPrincipals()
 
+            cancelToken = New Threading.CancellationTokenSource()
             Await Task.Run(AddressOf RefreshDS, cancelToken.Token)
         Catch ex As Exception
             If Not cancelToken.IsCancellationRequested Then
+                'Set the connection error flag
                 conErr = True
             End If
+        Finally
+            cancelToken.Dispose()
         End Try
     End Sub
 
@@ -264,9 +268,6 @@ Public Class ActiveDirectory
                 Next
             End If
         End If
-
-        'If mForm.QSBar.Visible Then mForm.QuickSearch(Nothing, Nothing)
-        'If mForm.QSMenu.Visible Then mForm.QuickSearch_Menu(Nothing, Nothing)
 
         If Not mForm.isRootNode() Then
             mForm.hiddenItems.Clear()

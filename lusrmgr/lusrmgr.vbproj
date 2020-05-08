@@ -320,6 +320,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Auth.resx">
       <DependentUpon>Auth.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ChangePw.resx">
       <DependentUpon>ChangePw.vb</DependentUpon>

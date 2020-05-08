@@ -142,7 +142,6 @@ Public Class Form1
     End Sub
 
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         Dim ComputerName As String = My.Computer.Name
         If ComputerName = Nothing Then ComputerName = "Local Computer"
         tw.Nodes(0).Text = ComputerName & " (this computer)"
@@ -158,7 +157,7 @@ Public Class Form1
 
             While localAD.isLoading()
 
-                Await Task.Delay(600)
+                Await Task.Delay(100)
 
                 If c.isBackground AndAlso tw.Nodes(0).Tag = cTag.Connected Then
                     If Not c.isClosing Then c.Close()
@@ -171,10 +170,12 @@ Public Class Form1
                 End If
 
                 Select Case loadingL.Tag
-                    Case Is < 3
+                    Case Is < 24
                         loadingL.Tag += 1
-                        loadingL.Text &= "."
-                    Case 3
+                        If loadingL.Tag = 6 OrElse loadingL.Tag = 12 OrElse loadingL.Tag = 18 Then
+                            loadingL.Text &= "."
+                        End If
+                    Case 24
                         loadingL.Tag = 0
                         loadingL.Text = loadingL.Text.Remove(loadingL.Text.Length - 3)
                 End Select
@@ -787,6 +788,8 @@ Public Class Form1
                 Dim addr As String = Connect.TextBox1.Text
                 c = New Connecting(Me)
 
+
+                '/////// DNS lookup ///////////////////////////////////
                 Try
                     c.SetText("Resolving host name")
 
@@ -814,19 +817,25 @@ Public Class Form1
 
                     Return
                 End Try
+                '//////////////////////////////////////////////////
 
+
+                '/////// Set display name /////////////////////////
                 Dim dspName As String = addr
                 If Connect.TextBox2.TextLength > 0 Then
                     dspName = Connect.TextBox2.Text
                 End If
+                '//////////////////////////////////////////////////
 
                 Connect.TextBox1.Text = ""
                 Connect.TextBox1.Select()
 
                 Dim newAD As ActiveDirectory
 
+                '/////// Authentication //////////////////////////
                 If Connect.promptAuth.Checked = False Then
                     c.SetText(addr, True)
+                    'Create AD object, connect
                     newAD = New ActiveDirectory(addr, Me, dspName)
                 Else
                     c.SetText("Waiting for authentication")
@@ -845,15 +854,17 @@ Public Class Form1
 
                     c.SetText(addr, True)
 
+                    'Create AD object, connect with credentials
                     newAD = New ActiveDirectory(addr, cred.Username, cred.Password, Me, dspName)
 
                     cred.Username = ""
                     cred.Password = ""
                 End If
+                '//////////////////////////////////////////////////
 
                 While newAD.isLoading()
 
-                    If newAD.conErr Then 'An error ocurred
+                    If newAD.conErr Then 'An error occurred
                         c.Close()
 
                         Dim result As Integer
@@ -871,7 +882,7 @@ Public Class Form1
                         Return
                     End If
 
-                    Await Task.Delay(600)
+                    Await Task.Delay(100)
 
                     If c.Cancel Then 'The user cancelled the process
                         c.Close()
@@ -882,7 +893,7 @@ Public Class Form1
 
                 c.Close()
 
-                If Not newAD.testConnection Then
+                If Not newAD.testConnection() Then
                     Dim result As Integer
 
                     TASKDIALOG.TaskDialog(Handle, nullptr, "Connection error", "Could not connect to computer", "There was an error whilst connecting to " & addr & "." & vbCrLf &
@@ -921,7 +932,7 @@ Public Class Form1
             End If
             Dim result As Integer
 
-            TASKDIALOG.TaskDialog(Handle, nullptr, "Unkown error", "Could not connect to computer", "An unkown error ocurred whilst connecting to the computer." & vbCrLf &
+            TASKDIALOG.TaskDialog(Handle, nullptr, "Unkown error", "Could not connect to computer", "An unkown error occurred whilst connecting to the computer." & vbCrLf &
                                     ex.Message.Replace(vbNewLine, ""), TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON, TD_ERROR_ICON, result)
 
             If result = IDRETRY Then

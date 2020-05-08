@@ -87,7 +87,7 @@ Partial Class About
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(452, 39)
         Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Version 1.5 (x86)"
+        Me.Label4.Text = "Version 1.5.1 (x86)"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label5

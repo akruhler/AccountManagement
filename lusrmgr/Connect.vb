@@ -1,38 +1,36 @@
-﻿Imports System.Threading
-Public Class Connect
-    Private Delegate Sub dTextBox(text As String)
-    Private thread As Thread
+﻿Public Class Connect
+    Private currentAsyncResult As IAsyncResult
 
-    Private Sub searchForHostName(addr As String)
-        On Error Resume Next
+    Private Async Sub queueHostEntry(result As IAsyncResult)
+        'This prevents multiple searches at a time by stopping all current searches
+        currentAsyncResult = result
 
-        Dim t As String = Net.Dns.GetHostEntry(addr).HostName
+        While Not result.IsCompleted
+            If currentAsyncResult IsNot result Then 'Determine whether scan is no longer required, since a new input has been given
+                Return
+            End If
 
-        If TextBox2.InvokeRequired Then
-            TextBox2.Invoke(New dTextBox(Sub(text As String)
-                                             TextBox2.Text = text
-                                         End Sub), t)
-        Else
-            TextBox2.Text = t
-        End If
+            Await Task.Delay(100)
+        End While
+
+        Try
+            TextBox2.Text = Net.Dns.EndGetHostEntry(result).HostName
+        Catch ex As Exception
+        End Try
+
+        currentAsyncResult = Nothing
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        If thread IsNot Nothing Then
-            thread.Abort()
-        End If
 
         TextBox2.Clear()
 
         If TextBox1.TextLength = 0 Then
             Button1.Enabled = False
+            currentAsyncResult = Nothing 'Cancel current DNS lookup
         Else
             Button1.Enabled = True
-
-            thread = New Thread(Sub()
-                                    searchForHostName(TextBox1.Text)
-                                End Sub)
-            thread.Start()
+            queueHostEntry(Net.Dns.BeginGetHostEntry(TextBox1.Text, Nothing, Nothing))
         End If
     End Sub
 
@@ -60,7 +58,7 @@ Public Class Connect
     End Sub
 
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
-        thread.Abort()
+        currentAsyncResult = Nothing 'Cancel current DNS lookup
     End Sub
 
     Private Sub Label2_HelpRequested(sender As Object, hlpevent As HelpEventArgs) Handles TextBox2.HelpRequested, Label2.HelpRequested
