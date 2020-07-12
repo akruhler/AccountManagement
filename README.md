@@ -7,9 +7,9 @@ Alternative for the snap-in lusrmgr.msc, including more features
 - Connect to remote machines to manage users and groups remotely
 - Customizable interface
 ## System requirements
-- Requires .NET Framework version 4.5 or newer
+- Requires .NET Framework version 4.6 or newer
 - Windows Vista/Windows Server 2008 or later
 ## Download
-[Download latest version (1.5.1)](https://github.com/proviq/lusrmgr/releases/download/1.5.1/lusrmgr.exe)
+[Download latest version (1.6)](https://github.com/proviq/lusrmgr/releases/download/1.6/lusrmgr.exe)
 
 Please note the code is not digitally signed, thus you might need to suppress warnings issued by e.g. SmartScreen in order to run the application.
