@@ -11,7 +11,7 @@
     <AssemblyName>lusrmgr</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
     <PublishUrl>veröffentlichen\</PublishUrl>
@@ -134,7 +134,7 @@
     <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>A457744B62FF63CF3454D2C98A3A3A17779E3D39</ManifestCertificateThumbprint>
@@ -143,10 +143,11 @@
     <ManifestKeyFile>lusrmgr_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>lusrmgr_cert.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -154,6 +155,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -179,90 +181,81 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.Designer.vb">
+    <Compile Include="src\Dialogs\About.Designer.vb">
       <DependentUpon>About.vb</DependentUpon>
     </Compile>
-    <Compile Include="About.vb">
+    <Compile Include="src\Dialogs\About.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AccessTimeT.vb" />
-    <Compile Include="ActiveDirectory.vb" />
-    <Compile Include="ActiveDsEx.vb" />
-    <Compile Include="AddGroup.Designer.vb">
+    <Compile Include="src\ActiveDirectory.vb" />
+    <Compile Include="src\Extensions\ActiveDsEx.vb" />
+    <Compile Include="src\PropertyWindows\AddGroup.Designer.vb">
       <DependentUpon>AddGroup.vb</DependentUpon>
     </Compile>
-    <Compile Include="AddGroup.vb">
+    <Compile Include="src\PropertyWindows\AddGroup.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddToGroup.Designer.vb">
+    <Compile Include="src\Dialogs\AddToGroup.Designer.vb">
       <DependentUpon>AddToGroup.vb</DependentUpon>
     </Compile>
-    <Compile Include="AddToGroup.vb">
+    <Compile Include="src\Dialogs\AddToGroup.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddUser.Designer.vb">
+    <Compile Include="src\PropertyWindows\AddUser.Designer.vb">
       <DependentUpon>AddUser.vb</DependentUpon>
     </Compile>
-    <Compile Include="AddUser.vb">
+    <Compile Include="src\PropertyWindows\AddUser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Auth.Designer.vb">
-      <DependentUpon>Auth.vb</DependentUpon>
+    <Compile Include="src\Handlers\ADHandler.vb" />
+    <Compile Include="src\HelperModules\BuiltIn.vb" />
+    <Compile Include="src\PropertyWindows\SetPw.Designer.vb">
+      <DependentUpon>SetPw.vb</DependentUpon>
     </Compile>
-    <Compile Include="Auth.vb">
+    <Compile Include="src\PropertyWindows\SetPw.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChangePw.Designer.vb">
-      <DependentUpon>ChangePw.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ChangePw.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="clsColors.vb" />
-    <Compile Include="clsMenuRenderer.vb" />
-    <Compile Include="COMErr.vb" />
-    <Compile Include="Config.vb" />
-    <Compile Include="Connect.Designer.vb">
+    <Compile Include="src\Extensions\clsColors.vb" />
+    <Compile Include="src\Extensions\clsMenuRenderer.vb" />
+    <Compile Include="src\HelperModules\COMErr.vb" />
+    <Compile Include="src\HelperModules\Config.vb" />
+    <Compile Include="src\Dialogs\Connect.Designer.vb">
       <DependentUpon>Connect.vb</DependentUpon>
     </Compile>
-    <Compile Include="Connect.vb">
+    <Compile Include="src\Dialogs\Connect.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Connecting.Designer.vb">
+    <Compile Include="src\Dialogs\Connecting.Designer.vb">
       <DependentUpon>Connecting.vb</DependentUpon>
     </Compile>
-    <Compile Include="Connecting.vb">
+    <Compile Include="src\Dialogs\Connecting.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlsEx.vb">
+    <Compile Include="src\Interop\ConnectionInterop.vb" />
+    <Compile Include="src\Extensions\ControlsEx.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EditGroup.Designer.vb">
+    <Compile Include="src\PropertyWindows\EditGroup.Designer.vb">
       <DependentUpon>EditGroup.vb</DependentUpon>
     </Compile>
-    <Compile Include="EditGroup.vb">
+    <Compile Include="src\PropertyWindows\EditGroup.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditUser.Designer.vb">
+    <Compile Include="src\PropertyWindows\EditUser.Designer.vb">
       <DependentUpon>EditUser.vb</DependentUpon>
     </Compile>
-    <Compile Include="EditUser.vb">
+    <Compile Include="src\PropertyWindows\EditUser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="src\Interop\LsaInterop.vb" />
+    <Compile Include="src\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="src\MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Loading.Designer.vb">
-      <DependentUpon>Loading.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Loading.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main.vb" />
+    <Compile Include="src\Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -278,70 +271,69 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Search.Designer.vb">
+    <Compile Include="src\Handlers\PropertyHandler.vb" />
+    <Compile Include="src\Handlers\QuickSearch.vb" />
+    <Compile Include="src\Dialogs\Search.Designer.vb">
       <DependentUpon>Search.vb</DependentUpon>
     </Compile>
-    <Compile Include="Search.vb">
+    <Compile Include="src\Dialogs\Search.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TaskDialog.vb" />
-    <Compile Include="Times.Designer.vb">
+    <Compile Include="src\Interop\TaskDialog.vb" />
+    <Compile Include="src\PropertyWindows\Times.Designer.vb">
       <DependentUpon>Times.vb</DependentUpon>
     </Compile>
-    <Compile Include="Times.vb">
+    <Compile Include="src\PropertyWindows\Times.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewSettings.Designer.vb">
+    <Compile Include="src\Handlers\MenuHandler.vb" />
+    <Compile Include="src\Handlers\ViewHandler.vb" />
+    <Compile Include="src\Dialogs\ViewSettings.Designer.vb">
       <DependentUpon>ViewSettings.vb</DependentUpon>
     </Compile>
-    <Compile Include="ViewSettings.vb">
+    <Compile Include="src\Dialogs\ViewSettings.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Warnings.Designer.vb">
+    <Compile Include="src\Dialogs\Warnings.Designer.vb">
       <DependentUpon>Warnings.vb</DependentUpon>
     </Compile>
-    <Compile Include="Warnings.vb">
+    <Compile Include="src\Dialogs\Warnings.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\Handlers\WindowHandler.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="About.resx">
+    <EmbeddedResource Include="src\Dialogs\About.resx">
       <DependentUpon>About.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddGroup.resx">
+    <EmbeddedResource Include="src\PropertyWindows\AddGroup.resx">
       <DependentUpon>AddGroup.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddToGroup.resx">
+    <EmbeddedResource Include="src\Dialogs\AddToGroup.resx">
       <DependentUpon>AddToGroup.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddUser.resx">
+    <EmbeddedResource Include="src\PropertyWindows\AddUser.resx">
       <DependentUpon>AddUser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Auth.resx">
-      <DependentUpon>Auth.vb</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="src\PropertyWindows\SetPw.resx">
+      <DependentUpon>SetPw.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChangePw.resx">
-      <DependentUpon>ChangePw.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Connect.resx">
+    <EmbeddedResource Include="src\Dialogs\Connect.resx">
       <DependentUpon>Connect.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Connecting.resx">
+    <EmbeddedResource Include="src\Dialogs\Connecting.resx">
       <DependentUpon>Connecting.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditGroup.resx">
+    <EmbeddedResource Include="src\PropertyWindows\EditGroup.resx">
       <DependentUpon>EditGroup.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditUser.resx">
+    <EmbeddedResource Include="src\PropertyWindows\EditUser.resx">
       <DependentUpon>EditUser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Loading.resx">
-      <DependentUpon>Loading.vb</DependentUpon>
+    <EmbeddedResource Include="src\MainForm.resx">
+      <DependentUpon>MainForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -349,21 +341,20 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Search.resx">
+    <EmbeddedResource Include="src\Dialogs\Search.resx">
       <DependentUpon>Search.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Times.resx">
+    <EmbeddedResource Include="src\PropertyWindows\Times.resx">
       <DependentUpon>Times.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewSettings.resx">
+    <EmbeddedResource Include="src\Dialogs\ViewSettings.resx">
       <DependentUpon>ViewSettings.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Warnings.resx">
+    <EmbeddedResource Include="src\Dialogs\Warnings.resx">
       <DependentUpon>Warnings.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="lusrmgr_cert.pfx" />
     <None Include="My Project\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -381,7 +372,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Group.ico" />
     <Content Include="usercpl_1.ico" />
   </ItemGroup>
   <ItemGroup>

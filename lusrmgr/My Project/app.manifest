@@ -16,7 +16,7 @@
             Wenn Sie Datei- und Registrierungsvirtualisierung für Abwärts- 
             kompatibilität verwenden möchten, löschen Sie den requestedExecutionLevel-Knoten.
         -->
-        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel level="highestAvailable" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>
@@ -34,6 +34,9 @@
 
       <!-- Wenn die Anwendung mit Windows 8 kompatibel ist, heben Sie die Auskommentierung des folgenden supportedOS-Knotens auf-->
       <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"></supportedOS>
+
+      <!-- Wenn die Anwendung mit Windows 10 kompatibel ist, heben Sie die Auskommentierung des folgenden supportedOS-Knotens auf-->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
 
     </application>
   </compatibility>

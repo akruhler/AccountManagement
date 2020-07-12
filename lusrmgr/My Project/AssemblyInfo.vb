@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Die Werte der Assemblyattribute überprüfen
 
 <Assembly: AssemblyTitle("Local user and group management")> 
-<Assembly: AssemblyDescription("Tool which allows you to easily manage the users and groups on local computers.")> 
+<Assembly: AssemblyDescription("Tool which allows an easy management of users and groups on local and remote computers.")> 
 <Assembly: AssemblyCompany("A. Krühler")> 
 <Assembly: AssemblyProduct("Local user and group management")> 
 <Assembly: AssemblyCopyright("Copyright © 2017-2020 A. Krühler")> 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.5.1.0")> 
-<Assembly: AssemblyFileVersion("1.5.1.0")> 
+<Assembly: AssemblyVersion("1.6.0.0")> 
+<Assembly: AssemblyFileVersion("1.6.0.0")> 
