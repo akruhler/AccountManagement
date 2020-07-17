@@ -34,10 +34,6 @@ Partial Class MainForm
         Me.cCollapse = New System.Windows.Forms.ToolStripMenuItem()
         Me.Icons = New System.Windows.Forms.ImageList(Me.components)
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.tw = New lusrmgr.TreeView()
-        Me.list = New lusrmgr.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ListContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cOpen = New System.Windows.Forms.ToolStripMenuItem()
@@ -51,6 +47,7 @@ Partial Class MainForm
         Me.BottomStatusStrip = New System.Windows.Forms.StatusStrip()
         Me.status = New System.Windows.Forms.ToolStripStatusLabel()
         Me.itemcount = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.WarningIndicator = New System.Windows.Forms.ToolStripDropDownButton()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WarningsDismissedTS = New System.Windows.Forms.ToolStripMenuItem()
@@ -93,6 +90,10 @@ Partial Class MainForm
         Me.QSBar = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.QSearch = New System.Windows.Forms.ToolStripTextBox()
+        Me.tw = New lusrmgr.TreeView()
+        Me.list = New lusrmgr.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TwContextMenu.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -131,7 +132,7 @@ Partial Class MainForm
         '
         'cDisconnect
         '
-        Me.cDisconnect.Image = CType(resources.GetObject("cDisconnect.Image"), System.Drawing.Image)
+        Me.cDisconnect.Image = Global.lusrmgr.My.Resources.Resources.DisconnectIcon
         Me.cDisconnect.Name = "cDisconnect"
         Me.cDisconnect.ShortcutKeys = System.Windows.Forms.Keys.Delete
         Me.cDisconnect.Size = New System.Drawing.Size(197, 22)
@@ -184,57 +185,6 @@ Partial Class MainForm
         Me.SplitContainer1.Size = New System.Drawing.Size(788, 325)
         Me.SplitContainer1.SplitterDistance = 261
         Me.SplitContainer1.TabIndex = 1
-        '
-        'tw
-        '
-        Me.tw.BackColor = System.Drawing.SystemColors.Window
-        Me.tw.ContextMenuStrip = Me.TwContextMenu
-        Me.tw.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tw.HideSelection = False
-        Me.tw.HotTracking = True
-        Me.tw.ImageIndex = 0
-        Me.tw.ImageList = Me.Icons
-        Me.tw.LabelEdit = True
-        Me.tw.Location = New System.Drawing.Point(0, 0)
-        Me.tw.Name = "tw"
-        TreeNode1.ImageIndex = 4
-        TreeNode1.Name = "Knoten0"
-        TreeNode1.SelectedImageIndex = 4
-        TreeNode1.Text = "Local users and groups on"
-        Me.tw.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1})
-        Me.tw.SelectedImageIndex = 0
-        Me.tw.ShowLines = False
-        Me.tw.ShowNodeToolTips = True
-        Me.tw.Size = New System.Drawing.Size(261, 325)
-        Me.tw.TabIndex = 0
-        '
-        'list
-        '
-        Me.list.BackColor = System.Drawing.SystemColors.Window
-        Me.list.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.list.ContextMenuStrip = Me.ListContextMenu
-        Me.list.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.list.FullRowSelect = True
-        Me.list.LabelEdit = True
-        Me.list.LabelWrap = False
-        Me.list.Location = New System.Drawing.Point(0, 0)
-        Me.list.Name = "list"
-        Me.list.ShowItemToolTips = True
-        Me.list.Size = New System.Drawing.Size(523, 325)
-        Me.list.SmallImageList = Me.Icons
-        Me.list.TabIndex = 0
-        Me.list.UseCompatibleStateImageBehavior = False
-        Me.list.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Name"
-        Me.ColumnHeader1.Width = 519
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "SID"
-        Me.ColumnHeader2.Width = 0
         '
         'ListContextMenu
         '
@@ -314,7 +264,8 @@ Partial Class MainForm
         '
         'BottomStatusStrip
         '
-        Me.BottomStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.status, Me.itemcount})
+        Me.BottomStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.status, Me.itemcount, Me.WarningIndicator})
+        Me.BottomStatusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.BottomStatusStrip.Location = New System.Drawing.Point(0, 402)
         Me.BottomStatusStrip.Name = "BottomStatusStrip"
         Me.BottomStatusStrip.Size = New System.Drawing.Size(788, 22)
@@ -330,6 +281,14 @@ Partial Class MainForm
         '
         Me.itemcount.Name = "itemcount"
         Me.itemcount.Size = New System.Drawing.Size(0, 17)
+        '
+        'WarningIndicator
+        '
+        Me.WarningIndicator.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.WarningIndicator.Image = Global.lusrmgr.My.Resources.Resources.Warning
+        Me.WarningIndicator.Name = "WarningIndicator"
+        Me.WarningIndicator.Size = New System.Drawing.Size(101, 20)
+        Me.WarningIndicator.Text = "1 warning(s)"
         '
         'MenuStrip1
         '
@@ -666,44 +625,95 @@ Partial Class MainForm
         Me.QSearch.Name = "QSearch"
         Me.QSearch.Size = New System.Drawing.Size(150, 25)
         '
+        'tw
+        '
+        Me.tw.BackColor = System.Drawing.SystemColors.Window
+        Me.tw.ContextMenuStrip = Me.TwContextMenu
+        Me.tw.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tw.HideSelection = False
+        Me.tw.HotTracking = True
+        Me.tw.ImageIndex = 0
+        Me.tw.ImageList = Me.Icons
+        Me.tw.LabelEdit = True
+        Me.tw.Location = New System.Drawing.Point(0, 0)
+        Me.tw.Name = "tw"
+        TreeNode1.ImageIndex = 4
+        TreeNode1.Name = "Knoten0"
+        TreeNode1.SelectedImageIndex = 4
+        TreeNode1.Text = "Local users and groups on"
+        Me.tw.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1})
+        Me.tw.SelectedImageIndex = 0
+        Me.tw.ShowLines = False
+        Me.tw.ShowNodeToolTips = True
+        Me.tw.Size = New System.Drawing.Size(261, 325)
+        Me.tw.TabIndex = 0
+        '
+        'list
+        '
+        Me.list.BackColor = System.Drawing.SystemColors.Window
+        Me.list.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.list.ContextMenuStrip = Me.ListContextMenu
+        Me.list.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.list.FullRowSelect = True
+        Me.list.LabelEdit = True
+        Me.list.LabelWrap = False
+        Me.list.Location = New System.Drawing.Point(0, 0)
+        Me.list.Name = "list"
+        Me.list.ShowItemToolTips = True
+        Me.list.Size = New System.Drawing.Size(523, 325)
+        Me.list.SmallImageList = Me.Icons
+        Me.list.TabIndex = 0
+        Me.list.UseCompatibleStateImageBehavior = False
+        Me.list.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Name"
+        Me.ColumnHeader1.Width = 519
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "SID"
+        Me.ColumnHeader2.Width = 0
+        '
         'MainForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7!, 15!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(788, 424)
         Me.Controls.Add(Me.ToolStripContainer1)
         Me.Controls.Add(Me.BottomStatusStrip)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MinimumSize = New System.Drawing.Size(571, 226)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Local users and groups"
-        Me.TwContextMenu.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.ListContextMenu.ResumeLayout(False)
-        Me.BottomStatusStrip.ResumeLayout(False)
-        Me.BottomStatusStrip.PerformLayout()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.ToolStripContainer1.ContentPanel.ResumeLayout(False)
-        Me.ToolStripContainer1.TopToolStripPanel.ResumeLayout(False)
-        Me.ToolStripContainer1.TopToolStripPanel.PerformLayout()
-        Me.ToolStripContainer1.ResumeLayout(False)
-        Me.ToolStripContainer1.PerformLayout()
-        Me.MainToolStrip.ResumeLayout(False)
-        Me.MainToolStrip.PerformLayout()
-        Me.QSBar.ResumeLayout(False)
-        Me.QSBar.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.TwContextMenu.ResumeLayout(false)
+        Me.SplitContainer1.Panel1.ResumeLayout(false)
+        Me.SplitContainer1.Panel2.ResumeLayout(false)
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer1.ResumeLayout(false)
+        Me.ListContextMenu.ResumeLayout(false)
+        Me.BottomStatusStrip.ResumeLayout(false)
+        Me.BottomStatusStrip.PerformLayout
+        Me.MenuStrip1.ResumeLayout(false)
+        Me.MenuStrip1.PerformLayout
+        Me.ToolStripContainer1.ContentPanel.ResumeLayout(false)
+        Me.ToolStripContainer1.TopToolStripPanel.ResumeLayout(false)
+        Me.ToolStripContainer1.TopToolStripPanel.PerformLayout
+        Me.ToolStripContainer1.ResumeLayout(false)
+        Me.ToolStripContainer1.PerformLayout
+        Me.MainToolStrip.ResumeLayout(false)
+        Me.MainToolStrip.PerformLayout
+        Me.QSBar.ResumeLayout(false)
+        Me.QSBar.PerformLayout
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents Icons As System.Windows.Forms.ImageList
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
@@ -772,5 +782,6 @@ Partial Class MainForm
     Friend WithEvents cShowBuiltInDetails As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RefreshAll As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cSetPassword As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents WarningIndicator As System.Windows.Forms.ToolStripDropDownButton
 
 End Class

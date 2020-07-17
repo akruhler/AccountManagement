@@ -108,12 +108,7 @@ Module LsaInterop
 
         Dim result As NTSTATUS = LsaOpenPolicy(systemName, New LSA_OBJECT_ATTRIBUTES, ACCESS_MASK.POLICY_LOOKUP_NAMES, PolicyHandle)
         If result <> STATUS_SUCCESS Then
-            If result = RPC_NT_CALL_FAILED Then
-                TaskDialog(parentWnd, "Local users and groups", "Connection error on LsaOpenPolicy", "Failed to obtain PolicyHandle for " & pSsystemName & vbCrLf & ". The remote call failed (Error code: 1726).", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0)
-            Else
-                ShowInteropError(parentWnd, "LsaOpenPolicy", "An unknown error occurred whilst obtaining a LsaPolicyHandle.", LsaNtStatusToWinError(result))
-            End If
-            PolicyHandle = IntPtr.Zero
+            Throw New System.ComponentModel.Win32Exception(LsaNtStatusToWinError(result))
         End If
 
         Marshal.FreeHGlobal(systemName.Buffer)
@@ -124,7 +119,7 @@ Module LsaInterop
     Sub ClosePolicyHandle(pHandle As IntPtr, parentWnd As IntPtr)
         Dim result As NTSTATUS = LsaClose(pHandle)
         If result <> STATUS_SUCCESS AndAlso result <> RPC_NT_CALL_FAILED Then
-            ShowInteropError(parentWnd, "LsaClose", "An unknown error occurred whilst closing a LsaPolicyHandle.", LsaNtStatusToWinError(result))
+            Debug.WriteLine("Function LsaClose failed. Error code: " & LsaNtStatusToWinError(result))
         End If
     End Sub
 
@@ -158,7 +153,7 @@ Module LsaInterop
 
             Dim LookupResult As NTSTATUS = LsaLookupSids(PolicyHandle, SidCount, pSidPointersArray, pReferencedDomains, pTranslatedNames)
             If LookupResult <> STATUS_SOME_NOT_MAPPED AndAlso LookupResult <> STATUS_SUCCESS Then
-                ShowInteropError(parentWnd, "LsaLookupSids", "An unknown error occurred whilst retrieving the built-in principals.", LsaNtStatusToWinError(LookupResult))
+                Throw New System.ComponentModel.Win32Exception(LsaNtStatusToWinError(LookupResult))
             Else
                 'Read the pointer pointing to the beginning of the TranslatedNames array and store the elements in a managed array
                 Dim TranslatedNames As LSA_TRANSLATED_NAME() = PtrToArray(Of LSA_TRANSLATED_NAME)(pTranslatedNames, SidCount)
@@ -172,7 +167,7 @@ Module LsaInterop
                 Marshal.Copy(pSidPointersArray, SidPointersArray, 0, SidCount)
 
                 'Initialize the Principals array
-                Principals = New List(Of BuiltInPrincipal) '(SidCount)
+                Principals = New List(Of BuiltInPrincipal)(SidCount - 1)
 
                 For i As Integer = 0 To SidCount - 1
 
@@ -237,10 +232,4 @@ Module LsaInterop
 
         Return mArr
     End Function
-
-    Sub ShowInteropError(parentWnd As IntPtr, FunctionName As String, Message As String, SystemErrorCode As Integer)
-        TaskDialog(parentWnd, FunctionName & " - Error", Message, "Please report this issue to the developer." & vbCrLf &
-                       "Function: " & FunctionName & vbCrLf & "System error: " & SystemErrorCode & " (" & New System.ComponentModel.Win32Exception(SystemErrorCode).Message & ")",
-                       TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0, True)
-    End Sub
 End Module

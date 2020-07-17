@@ -59,6 +59,14 @@ Module DsEntryEx
         End If
     End Sub
 
+    Sub SetUserFlag(ByRef flags As Integer, flag As ActiveDs.ADS_USER_FLAG, value As Boolean)
+        If value Then
+            flags = flags Or flag
+        Else
+            flags = flags And Not flag
+        End If
+    End Sub
+
     Function isDisallowed(c As Char) As Boolean
         Return {"/"c, "\"c, "["c, "]"c, """"c, ":"c, ";"c, "|"c, "<"c, ">"c, "+"c, "="c, ","c, "?"c, "*"c, "%"c, "@"c}.Contains(c)
     End Function

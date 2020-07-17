@@ -253,7 +253,9 @@ Public Class MainForm
     End Sub
 
     Private Sub AboutThisProgramToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutTS.Click
-        About.ShowDialog()
+        Using About As New About
+            About.ShowDialog()
+        End Using
     End Sub
 #End Region
 
@@ -463,7 +465,7 @@ Public Class MainForm
                             If WNetConnectResult <> SystemErrorCodes.SUCCESS Then
 
                                 loadingWindow.Hide()
-                                ShowConnectionError(WNetConnectResult, addr, Handle)
+                                ShowWNetAddConnectionError(WNetConnectResult, addr, Handle)
 
                                 'The account lockout is not handled by the system network logon dialog, so it needs to be handled here (otherwise, the dialog aborts)
                                 If WNetConnectResult = SystemErrorCodes.ERROR_ACCOUNT_LOCKED_OUT Then
@@ -478,7 +480,6 @@ Public Class MainForm
                         Loop
 
                         '/////// Connect and initialise AD /////////////////
-
                         loadingWindow.ControlBox = True
                         loadingWindow.SetText("Establishing connection with " & addr)
 
@@ -511,19 +512,6 @@ Public Class MainForm
                             End If
                         End While
 
-                        '/////// If there are no groups nor users available, show a warning
-                        If (newAD.UserList.Count + newAD.GroupList.Count) = 0 Then
-                            Dim result As Integer
-
-                            TaskDialog(Handle, "Connection warning", "Connection might not be available", "Neither users nor groups could be found on the remote machine." &
-                                                                "This usually means that the connection is not established properly. Please ensure the host address and account credentials are correct, and that the remote computer is configured to allow connetions.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON, TD_WARNING_ICON, result)
-                            If result = IDRETRY Then
-                                loadingWindow.Close()
-                                newAD.Disconnect()
-                                Continue Do
-                            End If
-                        End If
-
                         '/////// DNS lookup ///////////////////////////////////
                         loadingWindow.SetText("Waiting for DNS lookup")
                         Dim dnsTask As Task(Of String) = Connect.waitForDns
@@ -555,7 +543,9 @@ Public Class MainForm
 
                         newNode.Nodes.Add("Users", "Users", 0, 0)
                         newNode.Nodes.Add("Groups", "Groups", 1, 1)
-                        newNode.Nodes.Add("Built-in security principals", "Built-in security principals", 5, 5)
+                        If newAD.BuiltInPrincipals.Count > 0 Then
+                            newNode.Nodes.Add("Built-in security principals", "Built-in security principals", 5, 5)
+                        End If
                         newNode.Tag = newAD
 
                         ViewHandler.RefreshSearch()

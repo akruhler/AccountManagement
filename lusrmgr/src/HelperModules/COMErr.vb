@@ -26,8 +26,27 @@ Module COMErr
         UNKOWN_ERR = 3
     End Enum
 
+    Sub ShowAdvancedInfoError(parentWnd As IntPtr, MainInstruction As String, Message As String, FunctionName As String, SystemErrorCode As Integer)
+        Dim tdc As New TASKDIALOGCONFIG
+        tdc.cbSize = Runtime.InteropServices.Marshal.SizeOf(tdc)
+        tdc.hwndParent = parentWnd
+        tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON
+        tdc.dwFlags = TASKDIALOG_FLAGS.TDF_ALLOW_DIALOG_CANCELLATION Or TASKDIALOG_FLAGS.TDF_EXPAND_FOOTER_AREA
+        tdc.pszMainIcon = TD_ERROR_ICON
+
+        tdc.pszWindowTitle = "Local users and groups"
+        tdc.pszMainInstruction = MainInstruction
+        tdc.pszContent = Message & New System.ComponentModel.Win32Exception(SystemErrorCode).Message
+
+        tdc.pszExpandedInformation = "Function: " & FunctionName & vbCrLf & "System error code: " & SystemErrorCode
+        tdc.pszCollapsedControlText = "Show error details"
+        tdc.pszExpandedControlText = "Hide error details"
+
+        TaskDialogIndirect(tdc, 0, 0, 0)
+    End Sub
+
     Sub ShowPermissionDeniedErr(parentWnd As IntPtr)
-        TaskDialog(parentWnd, "Local users and groups", "Access denied", "You are not allowed to perform this operation." & vbCrLf & "Please contact your system administrator or run this program with enough privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+        TaskDialog(parentWnd, "Local users and groups", "Access denied", "You are not allowed to perform this operation." & vbCrLf & "Please contact your system administrator or run this program with enough privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
     End Sub
 
     Sub ShowUnknownErr(parentWnd As IntPtr, exMsg As String, Optional additional As String = "")
@@ -40,7 +59,7 @@ Module COMErr
             body = exMsg.Replace(vbCrLf, "") & vbCrLf & additional & vbCrLf & "Please report this issue to the developer."
         End If
 
-        TaskDialog(parentWnd, "Local users and groups", "An unkown error occurred", body, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing)
+        TaskDialog(parentWnd, "Local users and groups", "An unkown error occurred", body, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing, True)
     End Sub
 
     Sub ShowUnknownCOMErr(errCode As Int32, parentWnd As IntPtr, exMsg As String)
@@ -102,10 +121,10 @@ Module COMErr
                 TaskDialog(parentWnd, "Local users and groups", "Operation cannot be performed", "Cannot perform this operation on built-in accounts.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
                 Return False
             Case COMErrorCodes.USER_ALREADY_IN_GROUP
-                TaskDialog(parentWnd, "Local users and groups", "User is already member of group", "The user is already member of the target group and therefore cannot be added.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "User is already member of group", "The user """ & w & """ is already member of the target group and therefore cannot be added.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
                 Return COMErrResult.LOOP_CONTINUE
             Case COMErrorCodes.USER_NOT_IN_GROUP
-                TaskDialog(parentWnd, "Local users and groups", "User is not a member of group", "The user is not a member of the target group and therefore cannot be removed.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "User is not a member of group", "The user """ & w & """ is not a member of the target group and therefore cannot be removed.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
                 Return COMErrResult.LOOP_CONTINUE
             Case COMErrorCodes.RPC_CONNECTION_UNAVAILALBE
                 TaskDialog(parentWnd, "Local users and groups", "Connection unavailable", "The remote procedure call failed. Please check your connection and try again.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0)
@@ -205,7 +224,7 @@ Module COMErr
 
             Case COMErrorCodes.GROUPADD_KNOWNACCOUNT
                 TaskDialog(parentWnd, "Local users and groups", "Operation cannot be performed on built-in accounts", "System-defined groups cannot be members of predefined security principals.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
-                Return False
+                Return COMErrResult.LOOP_CONTINUE
             Case COMErrorCodes.ERROR_INCORRECT_ACCOUNT_TYPE
 
                 Dim result As Integer

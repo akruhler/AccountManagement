@@ -137,15 +137,4 @@
   <metadata name="PwDoesentMatchTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>30, 18</value>
   </metadata>
-  <data name="Label4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAAR5JREFUOE9jwAfOrVP7D8JQLmng4hbz/9d2q/y/f0z7P4gNFSYenF0j/v/zCw8w
-        BrGhwsQBmO2/vwSC8d1jOqS5AmY7zAAQ+/w6CeIMANl0c7/a/9/fokEawJgkVyDbDuSC8a8P3sSFBcgG
-        UKiDNIAwUAiMf77zBGOCMQKy4dsrd7BmkAagEMSAV65g/P2JHW5XwGz/8cwerBCECzNkwBjGB2Gsrnh0
-        oQkcyl9um4Dx15sG/79c1oBgKB8sBpUHqQXpgWqH2P7ksCJYw6cziv8/npAG00ApMAaxP19UgxsKUgt3
-        xf1TRWATYRo/HBKFY5gBH49KgOVgGKQWFBYgvWDbX55UBStC1kwIw11xdbf7/5U9/GRhkF6wN8gHDAwA
-        +BuEmGEgd9QAAAAASUVORK5CYII=
-</value>
-  </data>
 </root>

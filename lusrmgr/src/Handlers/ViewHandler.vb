@@ -37,6 +37,7 @@
         RefreshSearch()
     End Sub
 
+#Region "Item counters"
     ''' <summary>
     ''' Refreshes the item (selection) count in the status bar.
     ''' </summary>
@@ -70,6 +71,54 @@
         mainF.status.Text = ""
         mainF.itemcount.Text = ""
     End Sub
+#End Region
+
+#Region "Status bar warnings"
+
+    Private Sub RefreshWarnings()
+        Dim Warnings As List(Of ADWarning) = mainF.ADHandler.currentAD().Warnings
+        mainF.WarningIndicator.DropDownItems.Clear()
+
+        Select Case Warnings.Count
+            Case 0
+                mainF.WarningIndicator.Visible = False
+                Return
+            Case 1
+                mainF.WarningIndicator.Visible = True
+                mainF.WarningIndicator.Text = "1 Warning"
+            Case Else
+                mainF.WarningIndicator.Visible = True
+                mainF.WarningIndicator.Text = Warnings.Count & " Warnings"
+        End Select
+
+        For Each Warning As ADWarning In Warnings
+            mainF.WarningIndicator.DropDownItems.Add(Warning.Title, My.Resources.Warning, AddressOf HandleWarningClick).Tag = Warning
+        Next
+    End Sub
+
+    Private Sub HandleWarningClick(sender As Object, e As EventArgs)
+        Dim Warning As ADWarning = DirectCast(sender.Tag, ADWarning)
+
+        Dim tdc As New TASKDIALOGCONFIG
+        tdc.cbSize = Runtime.InteropServices.Marshal.SizeOf(tdc)
+        tdc.hwndParent = mainF.Handle
+        tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON
+        tdc.dwFlags = TASKDIALOG_FLAGS.TDF_ALLOW_DIALOG_CANCELLATION Or TASKDIALOG_FLAGS.TDF_EXPAND_FOOTER_AREA
+        tdc.pszMainIcon = TD_WARNING_ICON
+
+        tdc.pszWindowTitle = "Local users and groups"
+        tdc.pszMainInstruction = Warning.Title
+        tdc.pszContent = Warning.Description
+
+        If Warning.Details <> "" Then
+            tdc.pszExpandedInformation = Warning.Details
+            tdc.pszCollapsedControlText = "Show error details"
+            tdc.pszExpandedControlText = "Hide error details"
+        End If
+
+        TaskDialogIndirect(tdc, 0, 0, 0)
+    End Sub
+#End Region
 
     Public Sub ViewChanged(newView As View)
         currentView = newView
@@ -135,7 +184,9 @@
                 If mainF.ADHandler.currentAD() IsNot Nothing AndAlso Not mainF.ADHandler.currentAD().IsLoading() Then
                     mainF.list.Items.Add("Users", 0)
                     mainF.list.Items.Add("Groups", 1)
-                    mainF.list.Items.Add("Built-in security principals", 5)
+                    If mainF.ADHandler.currentAD().BuiltInPrincipals.Count > 0 Then
+                        mainF.list.Items.Add("Built-in security principals", 5)
+                    End If
                     mainF.PropertyHandler.CanCreateNew = True
                 Else
                     mainF.PropertyHandler.CanCreateNew = False
@@ -146,11 +197,12 @@
                 HideItemCounters()
         End Select
 
+        RefreshWarnings()
         mainF.MenuHandler.UpdateMenuControls()
     End Sub
 
     ''' <summary>
-    ''' Compares SID values in the ListView
+    ''' Compares SID values in the ListView.
     ''' </summary>
     ''' <remarks></remarks>
     Private Class ListViewSIDSorter

@@ -513,7 +513,7 @@ Partial Class EditUser
         '
         'unlockbtn
         '
-        Me.unlockbtn.Image = CType(resources.GetObject("unlockbtn.Image"), System.Drawing.Image)
+        Me.unlockbtn.Image = Global.lusrmgr.My.Resources.Resources.UnlockIcon
         Me.unlockbtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.unlockbtn.Location = New System.Drawing.Point(188, 250)
         Me.unlockbtn.Name = "unlockbtn"
@@ -797,6 +797,7 @@ Partial Class EditUser
         Me.GroupMembership.Name = "GroupMembership"
         Me.GroupMembership.ShowItemToolTips = True
         Me.GroupMembership.Size = New System.Drawing.Size(408, 285)
+        Me.GroupMembership.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.GroupMembership.TabIndex = 38
         Me.GroupMembership.UseCompatibleStateImageBehavior = False
         Me.GroupMembership.View = System.Windows.Forms.View.Details

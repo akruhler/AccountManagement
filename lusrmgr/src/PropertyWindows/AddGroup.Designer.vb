@@ -131,6 +131,7 @@ Partial Class AddGroup
         Me.list.Name = "list"
         Me.list.ShowItemToolTips = True
         Me.list.Size = New System.Drawing.Size(405, 164)
+        Me.list.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.list.TabIndex = 2
         Me.list.UseCompatibleStateImageBehavior = False
         Me.list.View = System.Windows.Forms.View.Details

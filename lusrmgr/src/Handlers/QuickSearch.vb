@@ -33,7 +33,9 @@
                     mainF.list.Items.Clear()
                     mainF.list.Items.Add("Users", 0)
                     mainF.list.Items.Add("Groups", 1)
-                    mainF.list.Items.Add("Built-in security principals", 5)
+                    If mainF.ADHandler.currentAD().BuiltInPrincipals.Count > 0 Then
+                        mainF.list.Items.Add("Built-in security principals", 5)
+                    End If
                 End If
             End If
 

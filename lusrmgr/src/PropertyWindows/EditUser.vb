@@ -198,11 +198,15 @@ Public Class EditUser
         userp.Description = Comment.Text
 
         'Flags
-        userp.AccountDisabled = AccountDisabled.Checked
-        dsUserp.SetUserFlag(ADS_USER_FLAG.ADS_UF_SMARTCARD_REQUIRED, SmartcardRequired.Checked)
-        dsUserp.SetUserFlag(ADS_USER_FLAG.ADS_UF_PASSWD_CANT_CHANGE, UserCantChangePw.Checked)
-        dsUserp.SetUserFlag(ADS_USER_FLAG.ADS_UF_DONT_EXPIRE_PASSWD, PwNeverExpires.Checked)
-        dsUserp.SetUserFlag(ADS_USER_FLAG.ADS_UF_PASSWD_NOTREQD, PwNotRequired.Checked)
+        Dim UserFlags As Integer = dsUserp.Properties("UserFlags").Value
+
+        SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_ACCOUNTDISABLE, AccountDisabled.Checked)
+        SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_SMARTCARD_REQUIRED, SmartcardRequired.Checked)
+        SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_PASSWD_CANT_CHANGE, UserCantChangePw.Checked)
+        SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_DONT_EXPIRE_PASSWD, PwNeverExpires.Checked)
+        SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_PASSWD_NOTREQD, PwNotRequired.Checked)
+
+        dsUserp.Properties("UserFlags").Value = UserFlags
 
         'Profile tab
         userp.Profile = ProfilePath.Text

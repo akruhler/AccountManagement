@@ -92,11 +92,15 @@ Public Class AddUser
             INewUser.Description = Comment.Text
 
             'User flags
-            INewUser.AccountDisabled = AccountDisabled.Checked
-            newUser.SetUserFlag(ADS_USER_FLAG.ADS_UF_PASSWD_NOTREQD, PwNotRequired.Checked)
-            newUser.SetUserFlag(ADS_USER_FLAG.ADS_UF_SMARTCARD_REQUIRED, SmartcardRequired.Checked)
-            newUser.SetUserFlag(ADS_USER_FLAG.ADS_UF_PASSWD_CANT_CHANGE, UserCantChangePw.Checked)
-            newUser.SetUserFlag(ADS_USER_FLAG.ADS_UF_DONT_EXPIRE_PASSWD, PwNeverExpires.Checked)
+            Dim UserFlags As Integer = newUser.Properties("UserFlags").Value
+
+            SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_ACCOUNTDISABLE, AccountDisabled.Checked)
+            SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_SMARTCARD_REQUIRED, SmartcardRequired.Checked)
+            SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_PASSWD_CANT_CHANGE, UserCantChangePw.Checked)
+            SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_DONT_EXPIRE_PASSWD, PwNeverExpires.Checked)
+            SetUserFlag(UserFlags, ADS_USER_FLAG.ADS_UF_PASSWD_NOTREQD, PwNotRequired.Checked)
+
+            newUser.Properties("UserFlags").Value = UserFlags
 
             'Profile
             Dim homedir As String = ""
@@ -332,7 +336,7 @@ Public Class AddUser
 
         For Each item As ListViewItem In GroupMembership.SelectedItems
 
-            If GroupMembership.Items.Count = 1 Then
+            If GroupMembership.Items.Count = 1 AndAlso Not AccountDisabled.Checked Then
                 If cfgBool("HideUserWithNoGroupWarning") = 0 Then
                     Dim result As Integer
                     Dim verif As Boolean
@@ -386,7 +390,6 @@ Public Class AddUser
         Dim tdc As New TASKDIALOGCONFIG()
         tdc.cbSize = Runtime.InteropServices.Marshal.SizeOf(tdc)
         tdc.hwndParent = Handle
-
 
         tdc.pszWindowTitle = "Inaccessible account"
         tdc.pszMainInstruction = "User won't be able to log on"

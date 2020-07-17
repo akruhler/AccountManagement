@@ -122,7 +122,7 @@ Partial Class SetPw
         '
         Me.Label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Label4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label4.Image = CType(resources.GetObject("Label4.Image"), System.Drawing.Image)
+        Me.Label4.Image = Global.lusrmgr.My.Resources.Resources.Warning
         Me.Label4.ImageAlign = System.Drawing.ContentAlignment.BottomLeft
         Me.Label4.Location = New System.Drawing.Point(0, 169)
         Me.Label4.Name = "Label4"

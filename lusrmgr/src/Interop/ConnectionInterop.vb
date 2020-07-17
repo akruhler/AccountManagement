@@ -75,11 +75,11 @@ Module ConnectionInterop
                                                                                 Return WNetCancelConnection2("\\" & Address, 0, False)
                                                                             End Function)
         If WNetCancelConnectionResult <> SystemErrorCodes.SUCCESS Then
-            ShowConnectionError(WNetCancelConnectionResult, Address, parentWnd)
+            Debug.WriteLine("Function WNetCancelConnection2 failed with error code " & WNetCancelConnectionResult & ". Address: " & Address)
         End If
     End Sub
 
-    Sub ShowConnectionError(errorCode As SystemErrorCodes, hostAddress As String, parentWnd As IntPtr)
+    Sub ShowWNetAddConnectionError(errorCode As SystemErrorCodes, hostAddress As String, parentWnd As IntPtr)
         Dim mainInstruction As String = "",
             content As String = ""
 
@@ -108,8 +108,8 @@ Module ConnectionInterop
                 mainInstruction = "Account is locked out"
                 content = "The account used to connect is currently locked out, as the logon attempt limit for this account has been exceeded. Please try again later or use a different account."
             Case Else
-                mainInstruction = "An unknown error occurred"
-                content = (New System.ComponentModel.Win32Exception(errorCode)).Message & vbCrLf & "Error code: " & errorCode & vbCrLf & "Please report this issue to the developer."
+                ShowAdvancedInfoError(parentWnd, "Could not connect to """ & hostAddress & """", "", "WNetAddConnection2", errorCode)
+                Return
         End Select
 
         TaskDialog(parentWnd, "Connection error", mainInstruction, content, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0, True)

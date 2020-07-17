@@ -137,17 +137,6 @@
   <metadata name="FilterMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>97, 17</value>
   </metadata>
-  <data name="filter_indicator.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAATZJREFUSEvt
-        k90uA0EYhvd+XBPOXYErECocECcijpCgoaJF/CVtNWU1S1XpaqluG5tlWy3txkbqZb50No5Ya/Zsn+TL
-        5Jtk3mdmMiMFBAgHAupH4JVkruZOcHhWQUGr48F8xUvHpsVs1IwWMqqO3UwZ60c3WEuqmN/JYTJ8ipGl
-        NPpHo64EfV+F1GUNZb2Jp6aFN/udignPSwZtYDNdwsJ+HtMRBaHlEwyMxXg4W/8rJJELunOKbvcDRqPt
-        CCKpImZjWYyvyH8O55CEBbJTtC2bZEzKBOGEipkNBYOhLU/hHJJcV0zUWxYenzsk2JbvsHhwhaGpvX+F
-        c0iiVhskUIoGose3GJ6LCwnnOJL8vUkvhvW9eWGQhF0RG3u9cFx/Jq8gcVH1VxDPav4KJlZlfwXfKkAU
-        kvQJezlVJzK7je8AAAAASUVORK5CYII=
-</value>
-  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAA0AMDAQAAEABABoBgAA1gAAACAgEAABAAQA6AIAAD4HAAAYGBAAAQAEAOgBAAAmCgAAEBAQAAEA

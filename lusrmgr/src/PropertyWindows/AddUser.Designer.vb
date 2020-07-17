@@ -476,6 +476,7 @@ Partial Class AddUser
         Me.GroupMembership.Name = "GroupMembership"
         Me.GroupMembership.ShowItemToolTips = True
         Me.GroupMembership.Size = New System.Drawing.Size(351, 160)
+        Me.GroupMembership.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.GroupMembership.TabIndex = 25
         Me.GroupMembership.UseCompatibleStateImageBehavior = False
         Me.GroupMembership.View = System.Windows.Forms.View.Details

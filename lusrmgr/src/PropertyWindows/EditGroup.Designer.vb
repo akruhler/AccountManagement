@@ -141,6 +141,7 @@ Partial Class EditGroup
         Me.GroupMembers.Name = "GroupMembers"
         Me.GroupMembers.ShowItemToolTips = True
         Me.GroupMembers.Size = New System.Drawing.Size(406, 182)
+        Me.GroupMembers.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.GroupMembers.TabIndex = 4
         Me.GroupMembers.UseCompatibleStateImageBehavior = False
         Me.GroupMembers.View = System.Windows.Forms.View.Details

@@ -1,6 +1,21 @@
 ﻿Imports ActiveDs
 Imports System.DirectoryServices
 Imports DsEntry = System.DirectoryServices.DirectoryEntry
+
+''' <summary>
+''' An object that encapsulates information for displaying AD related warnings in the status bar.
+''' </summary>
+''' <remarks></remarks>
+Public Class ADWarning
+    Public Title, Description, Details As String
+
+    Public Sub New(pTitle As String, pDescription As String, Optional pDetails As String = "")
+        Title = pTitle
+        Description = pDescription
+        Details = pDetails
+    End Sub
+End Class
+
 ''' <summary>
 ''' Represents an object for interfering with users and groups using the WinNT provider.
 ''' </summary>
@@ -22,6 +37,11 @@ Public Class ActiveDirectory
     Public ReadOnly UserList As New SortedDictionary(Of String, String)
     Public ReadOnly GroupList As New SortedSet(Of String)
     Public ReadOnly BuiltInPrincipals As List(Of BuiltInPrincipal)
+    ''' <summary>
+    ''' A list of warnings that is displayed in the bottom status bar. The user can view the specified details if necessary.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public ReadOnly Warnings As New List(Of ADWarning)
     Public UserGroup As DsEntry
 
     ''' <summary>
@@ -78,12 +98,19 @@ Public Class ActiveDirectory
 
         main = New DirectoryEntry("WinNT://" & addr)
 
-        Dim PolicyHandle As IntPtr = GetPolicyHandle(addr, mainForm.Handle)
-        If PolicyHandle <> IntPtr.Zero Then
+        Dim PolicyHandle As IntPtr = IntPtr.Zero
+        Try
+            PolicyHandle = GetPolicyHandle(addr, mainForm.Handle)
             BuiltInPrincipals = LookupWellKnownSids(PolicyHandle, mainForm.Handle, [Enum].GetValues(GetType(WellKnownSID)))
-            ClosePolicyHandle(PolicyHandle, mainF.Handle)
-        End If
-        
+        Catch ex As System.ComponentModel.Win32Exception
+            BuiltInPrincipals = New List(Of BuiltInPrincipal)(0)
+            Warnings.Add(New ADWarning("Could not retrieve built-in principals", "An error occurred whilst retrieving the built-in principals on the target system.", ex.Message & vbCrLf & "Error code: " & ex.NativeErrorCode & vbCrLf & "Function: " & ex.TargetSite.Name))
+        Finally
+            If PolicyHandle <> IntPtr.Zero Then
+                ClosePolicyHandle(PolicyHandle, mainF.Handle)
+            End If
+        End Try
+
         init()
     End Sub
 
@@ -145,6 +172,7 @@ Public Class ActiveDirectory
             Return sysSID & rID
         Else
             sysSID = "$RND" & (New Random).Next().ToString()
+            Warnings.Add(New ADWarning("Unable to retrieve system SID", "A randomly generated value will be used as a replacement.", "The GetID() function was called without the system SID being available."))
             rID = "$RND" & (New Random).Next().ToString()
             Return sysSID & rID
         End If
@@ -160,6 +188,7 @@ Public Class ActiveDirectory
             Return sysSID
         Else
             sysSID = "$RND" & (New Random).Next().ToString()
+            Warnings.Add(New ADWarning("Unable to retrieve system SID", "A randomly generated value will be used as a replacement.", "The GetSystemSID() function was called without the system SID being available."))
             Return sysSID
         End If
     End Function
@@ -327,12 +356,14 @@ Public Class ActiveDirectory
 
         If UserGroup Is Nothing Then
             NoUserGroup = True
+            Warnings.Add(New ADWarning("Unable to retrieve default user group", "The default user group (SID: S-1-5-32-545) could not be found on the target system. New users will not be assigned to any group."))
         End If
 
         'This code is only executed the first time refreshed (i.e. on init only)
         If isLoading_ Then
             If sysSID Is Nothing Then
                 sysSID = "$RND" & (New Random).Next().ToString()
+                Warnings.Add(New ADWarning("Unable to retrieve system SID", "The built-in administrator account, which is used to parse the system SID, was not found on the target system. As a result, a randomly generated value will be used instead."))
             End If
             rID = "$RND" & (New Random).Next().ToString()
             isLoading_ = False
