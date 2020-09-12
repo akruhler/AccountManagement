@@ -128,7 +128,7 @@
         mainF.list.MultiSelect = True
         mainF.list.ListViewItemSorter = Nothing
         mainF.list.Items.Clear()
-        mainF.QuickSearch.ClearQuickSearch()
+        mainF.QuickSearch.ClearQuickSearch(True)
 
         Select Case newView
             Case View.Users

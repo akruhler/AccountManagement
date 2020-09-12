@@ -8,8 +8,11 @@
 
     Private hiddenItems As New List(Of ListViewItem)
 
-    Public Sub ClearQuickSearch()
+    Public Sub ClearQuickSearch(Optional DisposeHiddenItems As Boolean = False)
         qsDisabled = True
+        If Not DisposeHiddenItems Then
+            mainF.list.Items.AddRange(hiddenItems.ToArray())
+        End If
         hiddenItems.Clear()
         mainF.QSMenu.Clear()
         mainF.QSearch.Clear()
