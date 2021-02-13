@@ -122,7 +122,7 @@ Public Class EditGroup
         Try
             gp.CommitChanges()
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         Catch ex As Runtime.InteropServices.COMException
             If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, GroupNameTextBox.Text) = COMErrResult.REFRESH Then
@@ -178,7 +178,7 @@ Public Class EditGroup
 
                     tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON
                     tdc.pszVerificationText = "Do not show this warning again"
-                    tdc.pszMainIcon = TD_WARNING
+                    tdc.pszMainIcon = TD_WARNING_ICON
 
                     TaskDialogIndirect(tdc, result, Nothing, verif)
 
@@ -195,7 +195,7 @@ Public Class EditGroup
                 gp.CommitChanges()
                 item.Remove()
             Catch ex As UnauthorizedAccessException
-                ShowPermissionDeniedErr(Handle)
+                ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                 Return
             Catch ex As Runtime.InteropServices.COMException
                 If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, GroupNameTextBox.Text) = COMErrResult.REFRESH Then
@@ -210,10 +210,6 @@ Public Class EditGroup
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         AddToGroup.Show(gp.Name, AD, AddToGroup.SourceWindow.EditGroup, GroupMembers)
     End Sub
-
-    'Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles GroupNameTextBox.KeyPress
-    '    If isDisallowed(e.KeyChar) Then e.KeyChar = Nothing : ToolTip1.Show("The symbols / \ [ ] "" : ; | < > + = , ? * % @ cannot be used in group names.", GroupNameTextBox, 3000)
-    'End Sub
 
     Private Sub ListView1_ColumnWidthChanging(sender As Object, e As ColumnWidthChangingEventArgs) Handles GroupMembers.ColumnWidthChanging
         e.NewWidth = GroupMembers.Columns(0).Width

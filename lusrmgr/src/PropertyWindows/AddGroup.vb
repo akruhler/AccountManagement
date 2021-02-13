@@ -71,7 +71,7 @@ Public Class AddGroup
         Try
             newg = AD.CreateGroup(GroupNameTextBox.Text, Comment.Text)
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         Catch ex As Runtime.InteropServices.COMException
             ShowCOMErr(ex.ErrorCode, Handle, ex.Message)
@@ -88,7 +88,7 @@ Public Class AddGroup
                 newg.IADsG().Add(AD.GetPath(Member.Text, True))
             Next
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         Catch ex As Runtime.InteropServices.COMException
             If ShowCOMErr(ex.ErrorCode, Handle, ex.Message) = COMErrResult.REFRESH Then
@@ -103,7 +103,7 @@ Public Class AddGroup
         Try
             newg.CommitChanges()
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         Catch ex As Runtime.InteropServices.COMException
             If ShowCOMErr(ex.ErrorCode, Handle, ex.Message) = COMErrResult.REFRESH Then

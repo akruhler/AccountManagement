@@ -1,6 +1,6 @@
 ﻿Public Class SetPw
-    Dim userp As DirectoryServices.DirectoryEntry
-    Dim AD As ActiveDirectory
+    Private userp As DirectoryServices.DirectoryEntry
+    Private AD As ActiveDirectory
 
     Shadows Function Show(user As DirectoryServices.DirectoryEntry, pAD As ActiveDirectory) As DialogResult
         Label1.Text = "Set password for " & user.Name
@@ -27,7 +27,7 @@
                 Return
             Catch ex As UnauthorizedAccessException
                 DialogResult = Windows.Forms.DialogResult.None
-                ShowPermissionDeniedErr(Handle)
+                ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                 Return
             End Try
 

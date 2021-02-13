@@ -146,6 +146,8 @@ Partial Class AddUser
         '
         'Label1
         '
+        Me.Label1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(37, 136)
         Me.Label1.Name = "Label1"
@@ -162,6 +164,8 @@ Partial Class AddUser
         '
         'Comment
         '
+        Me.Comment.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Comment.Location = New System.Drawing.Point(110, 136)
         Me.Comment.Multiline = True
         Me.Comment.Name = "Comment"
@@ -195,6 +199,9 @@ Partial Class AddUser
         '
         'FlowLayoutPanel1
         '
+        Me.FlowLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel1.AutoScroll = True
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox8)
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox3)
@@ -441,7 +448,7 @@ Partial Class AddUser
         Me.GroupBox7.Controls.Add(Me.GroupMembership)
         Me.GroupBox7.Location = New System.Drawing.Point(3, 521)
         Me.GroupBox7.Name = "GroupBox7"
-        Me.GroupBox7.Size = New System.Drawing.Size(383, 240)
+        Me.GroupBox7.Size = New System.Drawing.Size(383, 299)
         Me.GroupBox7.TabIndex = 11
         Me.GroupBox7.TabStop = False
         Me.GroupBox7.Text = "Group membership"
@@ -451,31 +458,31 @@ Partial Class AddUser
         Me.RmGroup.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.RmGroup.Enabled = False
         Me.RmGroup.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RmGroup.Location = New System.Drawing.Point(198, 199)
+        Me.RmGroup.Location = New System.Drawing.Point(197, 259)
         Me.RmGroup.Name = "RmGroup"
         Me.RmGroup.Size = New System.Drawing.Size(172, 27)
         Me.RmGroup.TabIndex = 27
-        Me.RmGroup.Text = "Remove membership"
+        Me.RmGroup.Text = "Remove from group"
         Me.RmGroup.UseVisualStyleBackColor = True
         '
         'AddToGrpBtn
         '
         Me.AddToGrpBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.AddToGrpBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.AddToGrpBtn.Location = New System.Drawing.Point(19, 199)
+        Me.AddToGrpBtn.Location = New System.Drawing.Point(14, 259)
         Me.AddToGrpBtn.Name = "AddToGrpBtn"
         Me.AddToGrpBtn.Size = New System.Drawing.Size(172, 27)
         Me.AddToGrpBtn.TabIndex = 26
-        Me.AddToGrpBtn.Text = "Add membership..."
+        Me.AddToGrpBtn.Text = "Add to group..."
         Me.AddToGrpBtn.UseVisualStyleBackColor = True
         '
         'GroupMembership
         '
         Me.GroupMembership.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3})
-        Me.GroupMembership.Location = New System.Drawing.Point(19, 29)
+        Me.GroupMembership.Location = New System.Drawing.Point(15, 29)
         Me.GroupMembership.Name = "GroupMembership"
         Me.GroupMembership.ShowItemToolTips = True
-        Me.GroupMembership.Size = New System.Drawing.Size(351, 160)
+        Me.GroupMembership.Size = New System.Drawing.Size(354, 219)
         Me.GroupMembership.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.GroupMembership.TabIndex = 25
         Me.GroupMembership.UseCompatibleStateImageBehavior = False
@@ -484,14 +491,15 @@ Partial Class AddUser
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "Groups"
-        Me.ColumnHeader3.Width = 348
+        Me.ColumnHeader3.Width = 350
         '
         'warnImg
         '
-        Me.warnImg.Image = Global.lusrmgr.My.Resources.Resources.Shield
-        Me.warnImg.Location = New System.Drawing.Point(199, 322)
+        Me.warnImg.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.warnImg.Image = Global.lusrmgr.My.Resources.Resources.Warning
+        Me.warnImg.Location = New System.Drawing.Point(199, 327)
         Me.warnImg.Name = "warnImg"
-        Me.warnImg.Size = New System.Drawing.Size(28, 27)
+        Me.warnImg.Size = New System.Drawing.Size(16, 16)
         Me.warnImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.warnImg.TabIndex = 124
         Me.warnImg.TabStop = False
@@ -499,6 +507,7 @@ Partial Class AddUser
         '
         'PwNotRequired
         '
+        Me.PwNotRequired.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.PwNotRequired.AutoSize = True
         Me.PwNotRequired.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.PwNotRequired.Location = New System.Drawing.Point(17, 388)
@@ -510,6 +519,7 @@ Partial Class AddUser
         '
         'UserMustChangePwOnNextLogon
         '
+        Me.UserMustChangePwOnNextLogon.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.UserMustChangePwOnNextLogon.AutoSize = True
         Me.UserMustChangePwOnNextLogon.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.UserMustChangePwOnNextLogon.Location = New System.Drawing.Point(17, 295)
@@ -521,6 +531,7 @@ Partial Class AddUser
         '
         'UserCantChangePw
         '
+        Me.UserCantChangePw.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.UserCantChangePw.AutoSize = True
         Me.UserCantChangePw.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.UserCantChangePw.Location = New System.Drawing.Point(17, 326)
@@ -532,6 +543,7 @@ Partial Class AddUser
         '
         'PwNeverExpires
         '
+        Me.PwNeverExpires.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.PwNeverExpires.AutoSize = True
         Me.PwNeverExpires.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.PwNeverExpires.Location = New System.Drawing.Point(17, 357)
@@ -543,6 +555,7 @@ Partial Class AddUser
         '
         'Label13
         '
+        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Label13.Location = New System.Drawing.Point(13, 202)
         Me.Label13.Name = "Label13"
@@ -551,6 +564,7 @@ Partial Class AddUser
         '
         'Password
         '
+        Me.Password.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Password.Location = New System.Drawing.Point(127, 218)
         Me.Password.Name = "Password"
         Me.Password.Size = New System.Drawing.Size(274, 23)
@@ -559,6 +573,7 @@ Partial Class AddUser
         '
         'Label5
         '
+        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(62, 221)
         Me.Label5.Name = "Label5"
@@ -568,6 +583,7 @@ Partial Class AddUser
         '
         'PasswordConfirm
         '
+        Me.PasswordConfirm.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.PasswordConfirm.Location = New System.Drawing.Point(127, 253)
         Me.PasswordConfirm.Name = "PasswordConfirm"
         Me.PasswordConfirm.Size = New System.Drawing.Size(274, 23)
@@ -576,6 +592,7 @@ Partial Class AddUser
         '
         'Label4
         '
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(14, 256)
         Me.Label4.Name = "Label4"

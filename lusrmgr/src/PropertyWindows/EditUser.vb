@@ -9,9 +9,6 @@ Public Class EditUser
     Public Sub New()
         InitializeComponent()
         CopyContextMenu.Renderer = New clsMenuRenderer()
-        OkButton.Top = 365
-        CancelBtn.Top = 365
-        ApplyButton.Top = 365
         GroupMembership.SmallImageList = MainForm.ListIcons
     End Sub
 
@@ -268,7 +265,7 @@ Public Class EditUser
                                 Return
                         End Select
                     Catch exx As UnauthorizedAccessException
-                        ShowPermissionDeniedErr(Handle)
+                        ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                         Return
                     End Try
                 Case COMErrResult.REFRESH, COMErrResult.UNKOWN_ERR
@@ -278,7 +275,7 @@ Public Class EditUser
             End Select
 
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         End Try
 
@@ -343,7 +340,7 @@ Public Class EditUser
 
     Private Sub TimesBtn_Click(sender As Object, e As EventArgs) Handles TimesBtn.Click
         Using TimesDialog As New Times
-            If TimesDialog.EditTimes(dsUserp) = Windows.Forms.DialogResult.Retry Then
+            If TimesDialog.EditTimes(dsUserp, AD.IsRemoteAD()) = Windows.Forms.DialogResult.Retry Then
                 AD.RefreshDS()
                 Close()
             End If
@@ -368,11 +365,11 @@ Public Class EditUser
             UserMustChangePwOnNextLogon.Checked = False
             UserMustChangePwOnNextLogon.Enabled = False
             If cfgBool("HideDisabledFlagInfo") = 0 Then
-                disabledImg.Show()
+                disabledInfo.Show()
             End If
         Else
             UserMustChangePwOnNextLogon.Enabled = True
-            disabledImg.Hide()
+            disabledInfo.Hide()
         End If
     End Sub
 
@@ -383,16 +380,12 @@ Public Class EditUser
 
     Private Sub TabChanging(sender As Object, e As TabControlCancelEventArgs) Handles Tabs.Selecting
 
-        UserIcon.Parent = e.TabPage
-        UserLabel.Parent = e.TabPage
-
         If e.TabPageIndex <> 4 Then
-            OkButton.Parent = e.TabPage
-            CancelBtn.Parent = e.TabPage
-            ApplyButton.Parent = e.TabPage
-
+            BottomPanel.Show()
             AcceptButton = OkButton
             CancelButton = CancelBtn
+        Else
+            BottomPanel.Hide()
         End If
 
         Select Case e.TabPageIndex
@@ -478,7 +471,7 @@ Public Class EditUser
 
                 tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON
                 tdc.pszVerificationText = "Do not show this warning again"
-                tdc.pszMainIcon = TD_WARNING
+                tdc.pszMainIcon = TD_WARNING_ICON
 
                 TaskDialogIndirect(tdc, result, Nothing, verif)
 
@@ -504,7 +497,7 @@ Public Class EditUser
                 group.CommitChanges()
                 item.Remove()
             Catch ex As UnauthorizedAccessException
-                ShowPermissionDeniedErr(Handle)
+                ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                 Return
             Catch ex As Runtime.InteropServices.COMException
                 If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, UserNameTextBox.Text) = COMErrResult.REFRESH Then
@@ -537,6 +530,10 @@ Public Class EditUser
         e.NewWidth = GroupMembership.Columns(0).Width
         e.Cancel = True
     End Sub
+
+    Private Sub ListView1_SizeChanged(sender As Object, e As EventArgs) Handles GroupMembership.SizeChanged
+        GroupMembership.Columns(0).Width = GroupMembership.Width - 1
+    End Sub
 #End Region
 
     Private Sub unlockbtn_Click(sender As Object, e As EventArgs) Handles unlockbtn.Click
@@ -545,7 +542,7 @@ Public Class EditUser
             dsUserp.CommitChanges()
             unlockbtn.Enabled = userp.IsAccountLocked
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
         Catch exx As Runtime.InteropServices.COMException
             If ShowCOMErr(exx.ErrorCode, Handle, exx.Message, UserNameTextBox.Text) = COMErrResult.REFRESH Then
                 AD.RefreshDS()
@@ -554,6 +551,9 @@ Public Class EditUser
     End Sub
 
 #Region "Help and information"
+    Private Sub disabledInfo_Click(sender As Object, e As EventArgs) Handles disabledInfo.Click
+        UserMustChangePasswordInfo.Show("This option cannot be enabled if either the option ""Password never expires"" is enabled or a smartcard logon is forced.", disabledInfo)
+    End Sub
 
     Private Sub warnChanged(sender As Object, e As EventArgs) Handles UserCantChangePw.CheckedChanged, UserMustChangePwOnNextLogon.CheckedChanged
         If cfgBool("HideWarningCantchgpasswd") = True Then Return
@@ -570,13 +570,13 @@ Public Class EditUser
         tdc.cbSize = Runtime.InteropServices.Marshal.SizeOf(tdc)
         tdc.hwndParent = Handle
 
-        tdc.pszWindowTitle = "Inaccessible account"
-        tdc.pszMainInstruction = "User won't be able to log on"
+        tdc.pszWindowTitle = "Inaccessible account warning"
+        tdc.pszMainInstruction = "Inaccessible account"
         tdc.pszContent = "The user's permission to change its password is not granted, but the user must change it before logging in the next time." & vbCrLf & "This will result in an inaccessible account."
 
         tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON
         tdc.pszVerificationText = "Hide this warning"
-        tdc.pszMainIcon = TD_WARNING
+        tdc.pszMainIcon = TD_WARNING_ICON
 
         Dim verif As Boolean
 

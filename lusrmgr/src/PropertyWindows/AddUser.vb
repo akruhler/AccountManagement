@@ -135,7 +135,7 @@ Public Class AddUser
             newUser.CommitChanges()
 
         Catch ex As UnauthorizedAccessException
-            ShowPermissionDeniedErr(Handle)
+            ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
             Return
         Catch ex As Runtime.InteropServices.COMException
             If ex.ErrorCode = COMErrorCodes.PW_POLICY Then
@@ -173,7 +173,7 @@ Public Class AddUser
                     g.CommitChanges()
                 Next
             Catch ex As UnauthorizedAccessException
-                ShowPermissionDeniedErr(Handle)
+                ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                 Return
             Catch ex As Runtime.InteropServices.COMException
                 If ShowCOMErr(ex.ErrorCode, Handle, ex.Message) = COMErrResult.REFRESH Then
@@ -357,7 +357,7 @@ Public Class AddUser
 
                     tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON
                     tdc.pszVerificationText = "Do not show this warning again"
-                    tdc.pszMainIcon = TD_WARNING
+                    tdc.pszMainIcon = TD_WARNING_ICON
 
                     TaskDialogIndirect(tdc, result, Nothing, verif)
 
@@ -391,13 +391,13 @@ Public Class AddUser
         tdc.cbSize = Runtime.InteropServices.Marshal.SizeOf(tdc)
         tdc.hwndParent = Handle
 
-        tdc.pszWindowTitle = "Inaccessible account"
-        tdc.pszMainInstruction = "User won't be able to log on"
+        tdc.pszWindowTitle = "Inaccessible account warning"
+        tdc.pszMainInstruction = "Inaccessible account"
         tdc.pszContent = "The user's permission to change its password is not granted, but the user must change it before logging in the next time." & vbCrLf & "This will result in an inaccessible account."
 
         tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON
         tdc.pszVerificationText = "Hide this warning"
-        tdc.pszMainIcon = TD_WARNING
+        tdc.pszMainIcon = TD_WARNING_ICON
 
         Dim verif As Boolean
 

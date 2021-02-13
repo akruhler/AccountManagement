@@ -8,6 +8,21 @@
     End Sub
 End Module
 
+Public Class TransparentPanel
+    Inherits Panel
+
+    Protected Overrides Sub OnPaintBackground(pevent As PaintEventArgs)
+    End Sub
+
+    Protected Overrides ReadOnly Property CreateParams As CreateParams
+        Get
+            Dim params As CreateParams = MyBase.CreateParams
+            params.ExStyle = params.ExStyle Or &H20 'WS_EX_TRANSPARENT
+            Return params
+        End Get
+    End Property
+End Class
+
 Public Class TreeView
     Inherits System.Windows.Forms.TreeView
 

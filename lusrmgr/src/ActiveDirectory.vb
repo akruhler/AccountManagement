@@ -49,7 +49,7 @@ Public Class ActiveDirectory
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub UpdateLists()
-        If Not mainF.ViewHandler.GetView() = ViewHandler_C.View.MachineRoot AndAlso mainF.ADHandler.currentAD().Equals(Me) Then
+        If Not mainF.ViewHandler.GetView() = ViewHandler_C.View.MachineRoot AndAlso mainF.ADHandler.currentAD Is Me Then
             mainF.ViewHandler.RefreshMainList()
         End If
         mainF.ViewHandler.RefreshSearch()
@@ -72,14 +72,6 @@ Public Class ActiveDirectory
 
         main.Close()
     End Sub
-
-    Public Shadows Function Equals(obj As ActiveDirectory) As Boolean
-        If GetID() = obj.GetID() Then
-            Return True
-        Else
-            Return False
-        End If
-    End Function
 
 #Region "Constructors"
 
@@ -144,6 +136,10 @@ Public Class ActiveDirectory
 
     Public Function IsLoading() As Boolean
         Return isLoading_
+    End Function
+
+    Public Function IsRemoteAD() As Boolean
+        Return mainF.ADHandler.localAD IsNot Me
     End Function
 
     Public Function ConnectionErrorOccurred() As Boolean
@@ -272,7 +268,11 @@ Public Class ActiveDirectory
             End If
             Return Nothing
         Catch ex As Exception
-            ShowUnknownErr(parentWnd, ex.Message)
+            If ex.HResult = &H80070035 Then 'Network path not found error
+                TaskDialog(parentWnd, "Local users and groups", "Could not access computer", "The network path could not be found.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0, True)
+            Else
+                ShowUnknownErr(parentWnd, ex.Message)
+            End If
             Return Nothing
         End Try
     End Function
@@ -294,7 +294,11 @@ Public Class ActiveDirectory
             End If
             Return Nothing
         Catch ex As Exception
-            ShowUnknownErr(parentWnd, ex.Message)
+            If ex.HResult = &H80070035 Then 'Network path not found error
+                TaskDialog(parentWnd, "Local users and groups", "Could not access computer", "The network path could not be found.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0, True)
+            Else
+                ShowUnknownErr(parentWnd, ex.Message)
+            End If
             Return Nothing
         End Try
     End Function
@@ -317,7 +321,7 @@ Public Class ActiveDirectory
     ''' Refreshes the user and group database.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub RefreshDS()
+    Public Sub RefreshDS(Optional DoNotUpdateLists As Boolean = False)
         GroupList.Clear()
         UserList.Clear()
 
@@ -370,7 +374,7 @@ Public Class ActiveDirectory
             Return
         End If
 
-        UpdateLists()
+        If Not DoNotUpdateLists Then UpdateLists()
     End Sub
 
 #Region "Rename handlers"
@@ -390,18 +394,48 @@ Public Class ActiveDirectory
         Dim dsuserp As DsEntry = FindUser(Name, parentWnd)
         If dsuserp IsNot Nothing AndAlso newName <> dsuserp.Name Then
             Try
-                dsuserp.Rename(newName)
-                dsuserp.CommitChanges()
+                'On the local machine, WMI is used for renaming because of the better performance it provides.
+                If Not IsRemoteAD() Then
+                    Dim result As Integer = 0
+                    Try
+                        'For better performance, the WMI Win32_UserAccount class is used to invoke the rename method locally.
+                        Dim wmi = GetObject("winmgmts:{impersonationLevel=impersonate}!\\localhost\root\cimv2")
+                        Dim accounts = wmi.ExecQuery("Select * from Win32_UserAccount Where Name = '" & Name & "'")
+                        result = accounts.ItemIndex(0).Rename(newName)
+                    Catch ex As Exception
+                        Dim a = ex.GetType()
+                        'Fallback to DirectoryServices
+                        If Not Warnings.Exists(Function(w As ADWarning) As Boolean
+                                                   Return w.Title = "WMI initialization failed"
+                                               End Function) Then
+                            'Add a warning message if not previously done
+                            Warnings.Add(New ADWarning("WMI initialization failed", "Failed to invoke WMI initialization during rename.", ex.Message))
+                            mainF.ViewHandler.RefreshWarnings()
+                        End If
+                        dsuserp.Rename(newName)
+                        dsuserp.CommitChanges()
+                    End Try
+
+                    If result <> SystemErrorCodes.SUCCESS Then
+                        'Fallback to DirectoryServices to recieve further information about the error
+                        dsuserp.Rename(newName)
+                        dsuserp.CommitChanges()
+                    End If
+                Else
+                    dsuserp.Rename(newName)
+                    dsuserp.CommitChanges()
+                End If
 
                 Dim fullName As String = UserList(Name)
                 UserList.Remove(Name)
                 UserList.Add(newName, fullName)
                 UpdateLists()
 
+                RefreshDS()
                 RaiseEvent OnRenameUser(Name, newName)
                 Return True
             Catch ex As UnauthorizedAccessException
-                ShowPermissionDeniedErr(mainF.Handle)
+                ShowPermissionDeniedErr(mainF.Handle, IsRemoteAD())
                 Return False
             Catch ex As Runtime.InteropServices.COMException
                 If ex.ErrorCode = COMErrorCodes.GROUP_NOT_FOUND_USER Then
@@ -425,17 +459,46 @@ Public Class ActiveDirectory
         Dim dsgrp As DsEntry = FindGroup(Name, parentWnd)
         If dsgrp IsNot Nothing AndAlso newName <> dsgrp.Name Then
             Try
-                dsgrp.Rename(newName)
-                dsgrp.CommitChanges()
+                'On the local machine, WMI is used for renaming because of the better performance it provides.
+                If Not IsRemoteAD() Then
+                    Dim result As Integer = 0
+                    Try
+                        'For better performance, the WMI Win32_Group class is used to invoke the rename method locally.
+                        Dim wmi = GetObject("winmgmts:{impersonationLevel=impersonate}!\\localhost\root\cimv2")
+                        Dim groups = wmi.ExecQuery("Select * from Win32_Group Where Name = '" & Name & "'")
+                        result = groups.ItemIndex(0).Rename(newName)
+                    Catch ex As Exception
+                        'Fallback to DirectoryServices
+                        If Not Warnings.Exists(Function(w As ADWarning) As Boolean
+                                                   Return w.Title = "WMI initialization failed"
+                                               End Function) Then
+                            'Add a warning message if not previously done
+                            Warnings.Add(New ADWarning("WMI initialization failed", "Failed to invoke WMI initialization during rename.", ex.Message))
+                            mainF.ViewHandler.RefreshWarnings()
+                        End If
+                        dsgrp.Rename(newName)
+                        dsgrp.CommitChanges()
+                    End Try
+
+                    If result <> SystemErrorCodes.SUCCESS Then
+                        'Fallback to DirectoryServices to recieve further information about the error
+                        dsgrp.Rename(newName)
+                        dsgrp.CommitChanges()
+                    End If
+                Else
+                    dsgrp.Rename(newName)
+                    dsgrp.CommitChanges()
+                End If
 
                 GroupList.Remove(Name)
                 GroupList.Add(newName)
                 UpdateLists()
 
+                RefreshDS()
                 RaiseEvent OnRenameGroup(Name, newName)
                 Return True
             Catch ex As UnauthorizedAccessException
-                ShowPermissionDeniedErr(parentWnd)
+                ShowPermissionDeniedErr(parentWnd, IsRemoteAD())
                 Return False
             Catch ex As Runtime.InteropServices.COMException
                 If ShowCOMErr(ex.ErrorCode, parentWnd, ex.Message, Name) = COMErrResult.REFRESH Then

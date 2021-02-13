@@ -27,11 +27,8 @@ Partial Class EditUser
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.TabGeneral = New System.Windows.Forms.TabPage()
         Me.Label13 = New System.Windows.Forms.Label()
-        Me.OkButton = New System.Windows.Forms.Button()
         Me.SID = New System.Windows.Forms.TextBox()
-        Me.CancelBtn = New System.Windows.Forms.Button()
         Me.Label20 = New System.Windows.Forms.Label()
-        Me.ApplyButton = New System.Windows.Forms.Button()
         Me.UserNameTextBox = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -39,11 +36,9 @@ Partial Class EditUser
         Me.Label1 = New System.Windows.Forms.Label()
         Me.FullName = New System.Windows.Forms.TextBox()
         Me.Comment = New System.Windows.Forms.TextBox()
-        Me.UserLabel = New System.Windows.Forms.Label()
-        Me.UserIcon = New System.Windows.Forms.PictureBox()
         Me.TabPassword = New System.Windows.Forms.TabPage()
+        Me.disabledInfo = New lusrmgr.TransparentPanel()
         Me.warnImg = New System.Windows.Forms.PictureBox()
-        Me.disabledImg = New System.Windows.Forms.PictureBox()
         Me.PwNotRequired = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.UserCantChangePw = New System.Windows.Forms.CheckBox()
@@ -89,13 +84,18 @@ Partial Class EditUser
         Me.AddToGrpBtn = New System.Windows.Forms.Button()
         Me.GroupMembership = New lusrmgr.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.UserLabel = New System.Windows.Forms.Label()
+        Me.UserIcon = New System.Windows.Forms.PictureBox()
+        Me.OkButton = New System.Windows.Forms.Button()
+        Me.CancelBtn = New System.Windows.Forms.Button()
+        Me.ApplyButton = New System.Windows.Forms.Button()
         Me.UserMustChangePasswordInfo = New System.Windows.Forms.ToolTip(Me.components)
+        Me.BottomPanel = New System.Windows.Forms.Panel()
+        Me.TopPanel = New System.Windows.Forms.Panel()
         Me.Tabs.SuspendLayout()
         Me.TabGeneral.SuspendLayout()
-        CType(Me.UserIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPassword.SuspendLayout()
         CType(Me.warnImg, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.disabledImg, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CopyContextMenu.SuspendLayout()
         Me.TabLogon.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -103,6 +103,9 @@ Partial Class EditUser
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TabGroups.SuspendLayout()
+        CType(Me.UserIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.BottomPanel.SuspendLayout()
+        Me.TopPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Tabs
@@ -124,11 +127,8 @@ Partial Class EditUser
         '
         Me.TabGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabGeneral.Controls.Add(Me.Label13)
-        Me.TabGeneral.Controls.Add(Me.OkButton)
         Me.TabGeneral.Controls.Add(Me.SID)
-        Me.TabGeneral.Controls.Add(Me.CancelBtn)
         Me.TabGeneral.Controls.Add(Me.Label20)
-        Me.TabGeneral.Controls.Add(Me.ApplyButton)
         Me.TabGeneral.Controls.Add(Me.UserNameTextBox)
         Me.TabGeneral.Controls.Add(Me.Label3)
         Me.TabGeneral.Controls.Add(Me.Label4)
@@ -136,8 +136,6 @@ Partial Class EditUser
         Me.TabGeneral.Controls.Add(Me.Label1)
         Me.TabGeneral.Controls.Add(Me.FullName)
         Me.TabGeneral.Controls.Add(Me.Comment)
-        Me.TabGeneral.Controls.Add(Me.UserLabel)
-        Me.TabGeneral.Controls.Add(Me.UserIcon)
         Me.TabGeneral.Location = New System.Drawing.Point(4, 24)
         Me.TabGeneral.Name = "TabGeneral"
         Me.TabGeneral.Padding = New System.Windows.Forms.Padding(3)
@@ -147,66 +145,38 @@ Partial Class EditUser
         '
         'Label13
         '
+        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Label13.Location = New System.Drawing.Point(22, 282)
+        Me.Label13.Location = New System.Drawing.Point(22, 277)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(376, 2)
         Me.Label13.TabIndex = 99
         '
-        'OkButton
-        '
-        Me.OkButton.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OkButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.OkButton.Location = New System.Drawing.Point(138, 365)
-        Me.OkButton.Name = "OkButton"
-        Me.OkButton.Size = New System.Drawing.Size(88, 29)
-        Me.OkButton.TabIndex = 8
-        Me.OkButton.Text = "OK"
-        Me.OkButton.UseVisualStyleBackColor = True
-        '
         'SID
         '
-        Me.SID.Location = New System.Drawing.Point(101, 300)
+        Me.SID.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SID.Location = New System.Drawing.Point(101, 295)
         Me.SID.Name = "SID"
         Me.SID.ReadOnly = True
         Me.SID.Size = New System.Drawing.Size(297, 23)
         Me.SID.TabIndex = 4
         '
-        'CancelBtn
-        '
-        Me.CancelBtn.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CancelBtn.Location = New System.Drawing.Point(233, 365)
-        Me.CancelBtn.Name = "CancelBtn"
-        Me.CancelBtn.Size = New System.Drawing.Size(88, 29)
-        Me.CancelBtn.TabIndex = 9
-        Me.CancelBtn.Text = "Cancel"
-        Me.CancelBtn.UseVisualStyleBackColor = True
-        '
         'Label20
         '
-        Me.Label20.Location = New System.Drawing.Point(21, 300)
+        Me.Label20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label20.Location = New System.Drawing.Point(21, 295)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(72, 23)
         Me.Label20.TabIndex = 64
         Me.Label20.Text = "SID:"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'ApplyButton
-        '
-        Me.ApplyButton.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ApplyButton.Enabled = False
-        Me.ApplyButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ApplyButton.Location = New System.Drawing.Point(328, 365)
-        Me.ApplyButton.Name = "ApplyButton"
-        Me.ApplyButton.Size = New System.Drawing.Size(88, 29)
-        Me.ApplyButton.TabIndex = 10
-        Me.ApplyButton.Text = "Apply"
-        Me.ApplyButton.UseVisualStyleBackColor = True
-        '
         'UserNameTextBox
         '
+        Me.UserNameTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UserNameTextBox.BackColor = System.Drawing.SystemColors.Control
         Me.UserNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.UserNameTextBox.Location = New System.Drawing.Point(101, 73)
@@ -254,6 +224,8 @@ Partial Class EditUser
         '
         'FullName
         '
+        Me.FullName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FullName.Location = New System.Drawing.Point(101, 108)
         Me.FullName.Name = "FullName"
         Me.FullName.Size = New System.Drawing.Size(297, 23)
@@ -261,36 +233,21 @@ Partial Class EditUser
         '
         'Comment
         '
+        Me.Comment.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Comment.Location = New System.Drawing.Point(101, 151)
         Me.Comment.Multiline = True
         Me.Comment.Name = "Comment"
         Me.Comment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.Comment.Size = New System.Drawing.Size(297, 113)
+        Me.Comment.Size = New System.Drawing.Size(297, 108)
         Me.Comment.TabIndex = 3
-        '
-        'UserLabel
-        '
-        Me.UserLabel.Location = New System.Drawing.Point(51, 15)
-        Me.UserLabel.Name = "UserLabel"
-        Me.UserLabel.Size = New System.Drawing.Size(363, 39)
-        Me.UserLabel.TabIndex = 15
-        Me.UserLabel.Text = "User settings for"
-        Me.UserLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'UserIcon
-        '
-        Me.UserIcon.Image = Global.lusrmgr.My.Resources.Resources.UserIcon
-        Me.UserIcon.Location = New System.Drawing.Point(13, 15)
-        Me.UserIcon.Name = "UserIcon"
-        Me.UserIcon.Size = New System.Drawing.Size(38, 40)
-        Me.UserIcon.TabIndex = 14
-        Me.UserIcon.TabStop = False
         '
         'TabPassword
         '
         Me.TabPassword.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPassword.Controls.Add(Me.disabledInfo)
         Me.TabPassword.Controls.Add(Me.warnImg)
-        Me.TabPassword.Controls.Add(Me.disabledImg)
         Me.TabPassword.Controls.Add(Me.PwNotRequired)
         Me.TabPassword.Controls.Add(Me.Label9)
         Me.TabPassword.Controls.Add(Me.UserCantChangePw)
@@ -308,29 +265,27 @@ Partial Class EditUser
         Me.TabPassword.TabIndex = 4
         Me.TabPassword.Text = "Password"
         '
+        'disabledInfo
+        '
+        Me.disabledInfo.BackColor = System.Drawing.Color.Transparent
+        Me.disabledInfo.Location = New System.Drawing.Point(18, 211)
+        Me.disabledInfo.Name = "disabledInfo"
+        Me.disabledInfo.Size = New System.Drawing.Size(260, 36)
+        Me.disabledInfo.TabIndex = 108
+        Me.UserMustChangePasswordInfo.SetToolTip(Me.disabledInfo, "This option cannot be enabled if either the option" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & """Password never expires"" is e" & _
+        "nabled or a smartcard logon is forced.")
+        Me.disabledInfo.Visible = False
+        '
         'warnImg
         '
-        Me.warnImg.Image = Global.lusrmgr.My.Resources.Resources.Shield
-        Me.warnImg.Location = New System.Drawing.Point(209, 251)
+        Me.warnImg.Image = Global.lusrmgr.My.Resources.Resources.Warning
+        Me.warnImg.Location = New System.Drawing.Point(209, 255)
         Me.warnImg.Name = "warnImg"
-        Me.warnImg.Size = New System.Drawing.Size(28, 27)
+        Me.warnImg.Size = New System.Drawing.Size(16, 16)
         Me.warnImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.warnImg.TabIndex = 102
         Me.warnImg.TabStop = False
         Me.warnImg.Visible = False
-        '
-        'disabledImg
-        '
-        Me.disabledImg.Image = CType(resources.GetObject("disabledImg.Image"), System.Drawing.Image)
-        Me.disabledImg.Location = New System.Drawing.Point(267, 213)
-        Me.disabledImg.Name = "disabledImg"
-        Me.disabledImg.Size = New System.Drawing.Size(34, 34)
-        Me.disabledImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.disabledImg.TabIndex = 101
-        Me.disabledImg.TabStop = False
-        Me.UserMustChangePasswordInfo.SetToolTip(Me.disabledImg, "This option cannot be enabled if either the option" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & """Password never expires"" is e" & _
-        "nabled or a smartcard logon is forced.")
-        Me.disabledImg.Visible = False
         '
         'PwNotRequired
         '
@@ -345,6 +300,8 @@ Partial Class EditUser
         '
         'Label9
         '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Label9.Location = New System.Drawing.Point(13, 199)
         Me.Label9.Name = "Label9"
@@ -397,6 +354,8 @@ Partial Class EditUser
         '
         'PwLastChanged
         '
+        Me.PwLastChanged.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PwLastChanged.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PwLastChanged.ContextMenuStrip = Me.CopyContextMenu
         Me.PwLastChanged.Location = New System.Drawing.Point(162, 109)
@@ -440,6 +399,8 @@ Partial Class EditUser
         '
         'PwExpDate
         '
+        Me.PwExpDate.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PwExpDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PwExpDate.ContextMenuStrip = Me.CopyContextMenu
         Me.PwExpDate.Location = New System.Drawing.Point(162, 71)
@@ -469,6 +430,8 @@ Partial Class EditUser
         '
         'GroupBox3
         '
+        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox3.Controls.Add(Me.AccountExpDate)
         Me.GroupBox3.Controls.Add(Me.AccountNeverExpires)
         Me.GroupBox3.Controls.Add(Me.AccountExpTime)
@@ -481,7 +444,7 @@ Partial Class EditUser
         '
         'AccountExpDate
         '
-        Me.AccountExpDate.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.AccountExpDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AccountExpDate.CustomFormat = ""
         Me.AccountExpDate.Location = New System.Drawing.Point(17, 28)
         Me.AccountExpDate.Name = "AccountExpDate"
@@ -490,7 +453,7 @@ Partial Class EditUser
         '
         'AccountNeverExpires
         '
-        Me.AccountNeverExpires.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.AccountNeverExpires.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.AccountNeverExpires.AutoSize = True
         Me.AccountNeverExpires.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.AccountNeverExpires.Location = New System.Drawing.Point(17, 58)
@@ -502,13 +465,13 @@ Partial Class EditUser
         '
         'AccountExpTime
         '
-        Me.AccountExpTime.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.AccountExpTime.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.AccountExpTime.CustomFormat = ""
         Me.AccountExpTime.Format = System.Windows.Forms.DateTimePickerFormat.Time
         Me.AccountExpTime.Location = New System.Drawing.Point(289, 28)
         Me.AccountExpTime.Name = "AccountExpTime"
         Me.AccountExpTime.ShowUpDown = True
-        Me.AccountExpTime.Size = New System.Drawing.Size(86, 23)
+        Me.AccountExpTime.Size = New System.Drawing.Size(91, 23)
         Me.AccountExpTime.TabIndex = 102
         '
         'unlockbtn
@@ -557,6 +520,8 @@ Partial Class EditUser
         '
         'failedtimes
         '
+        Me.failedtimes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.failedtimes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.failedtimes.ContextMenuStrip = Me.CopyContextMenu
         Me.failedtimes.Location = New System.Drawing.Point(181, 108)
@@ -567,6 +532,8 @@ Partial Class EditUser
         '
         'lastlogon
         '
+        Me.lastlogon.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lastlogon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lastlogon.ContextMenuStrip = Me.CopyContextMenu
         Me.lastlogon.Location = New System.Drawing.Point(181, 69)
@@ -607,6 +574,8 @@ Partial Class EditUser
         '
         'GroupBox2
         '
+        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Label21)
         Me.GroupBox2.Controls.Add(Me.ProfilePath)
         Me.GroupBox2.Controls.Add(Me.Label15)
@@ -629,6 +598,8 @@ Partial Class EditUser
         '
         'ProfilePath
         '
+        Me.ProfilePath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProfilePath.Location = New System.Drawing.Point(97, 27)
         Me.ProfilePath.Name = "ProfilePath"
         Me.ProfilePath.Size = New System.Drawing.Size(290, 23)
@@ -645,6 +616,8 @@ Partial Class EditUser
         '
         'ScriptPath
         '
+        Me.ScriptPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ScriptPath.Location = New System.Drawing.Point(97, 65)
         Me.ScriptPath.Name = "ScriptPath"
         Me.ScriptPath.Size = New System.Drawing.Size(290, 23)
@@ -652,6 +625,8 @@ Partial Class EditUser
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.homedrvR)
         Me.GroupBox1.Controls.Add(Me.HomeRemotePath)
         Me.GroupBox1.Controls.Add(Me.homedirL)
@@ -692,6 +667,8 @@ Partial Class EditUser
         '
         'homedirL
         '
+        Me.homedirL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.homedirL.Enabled = False
         Me.homedirL.Location = New System.Drawing.Point(105, 29)
         Me.homedirL.Name = "homedirL"
@@ -710,6 +687,8 @@ Partial Class EditUser
         '
         'homedirR
         '
+        Me.homedirR.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.homedirR.Enabled = False
         Me.homedirR.Location = New System.Drawing.Point(105, 131)
         Me.homedirR.Name = "homedirR"
@@ -807,11 +786,88 @@ Partial Class EditUser
         Me.ColumnHeader1.Text = "Groups"
         Me.ColumnHeader1.Width = 406
         '
+        'UserLabel
+        '
+        Me.UserLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UserLabel.Location = New System.Drawing.Point(41, 9)
+        Me.UserLabel.Name = "UserLabel"
+        Me.UserLabel.Size = New System.Drawing.Size(368, 39)
+        Me.UserLabel.TabIndex = 15
+        Me.UserLabel.Text = "User settings for"
+        Me.UserLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'UserIcon
+        '
+        Me.UserIcon.Image = Global.lusrmgr.My.Resources.Resources.UserIcon
+        Me.UserIcon.Location = New System.Drawing.Point(3, 9)
+        Me.UserIcon.Name = "UserIcon"
+        Me.UserIcon.Size = New System.Drawing.Size(38, 40)
+        Me.UserIcon.TabIndex = 14
+        Me.UserIcon.TabStop = False
+        '
+        'OkButton
+        '
+        Me.OkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OkButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.OkButton.Location = New System.Drawing.Point(125, 7)
+        Me.OkButton.Name = "OkButton"
+        Me.OkButton.Size = New System.Drawing.Size(88, 29)
+        Me.OkButton.TabIndex = 8
+        Me.OkButton.Text = "OK"
+        Me.OkButton.UseVisualStyleBackColor = True
+        '
+        'CancelBtn
+        '
+        Me.CancelBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CancelBtn.Location = New System.Drawing.Point(220, 7)
+        Me.CancelBtn.Name = "CancelBtn"
+        Me.CancelBtn.Size = New System.Drawing.Size(88, 29)
+        Me.CancelBtn.TabIndex = 9
+        Me.CancelBtn.Text = "Cancel"
+        Me.CancelBtn.UseVisualStyleBackColor = True
+        '
+        'ApplyButton
+        '
+        Me.ApplyButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ApplyButton.Enabled = False
+        Me.ApplyButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ApplyButton.Location = New System.Drawing.Point(315, 7)
+        Me.ApplyButton.Name = "ApplyButton"
+        Me.ApplyButton.Size = New System.Drawing.Size(88, 29)
+        Me.ApplyButton.TabIndex = 10
+        Me.ApplyButton.Text = "Apply"
+        Me.ApplyButton.UseVisualStyleBackColor = True
+        '
         'UserMustChangePasswordInfo
         '
         Me.UserMustChangePasswordInfo.IsBalloon = True
         Me.UserMustChangePasswordInfo.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.UserMustChangePasswordInfo.ToolTipTitle = "User must change password at next logon"
+        '
+        'BottomPanel
+        '
+        Me.BottomPanel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BottomPanel.Controls.Add(Me.ApplyButton)
+        Me.BottomPanel.Controls.Add(Me.OkButton)
+        Me.BottomPanel.Controls.Add(Me.CancelBtn)
+        Me.BottomPanel.Location = New System.Drawing.Point(16, 382)
+        Me.BottomPanel.Name = "BottomPanel"
+        Me.BottomPanel.Size = New System.Drawing.Size(409, 43)
+        Me.BottomPanel.TabIndex = 1
+        '
+        'TopPanel
+        '
+        Me.TopPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TopPanel.Controls.Add(Me.UserLabel)
+        Me.TopPanel.Controls.Add(Me.UserIcon)
+        Me.TopPanel.Location = New System.Drawing.Point(13, 30)
+        Me.TopPanel.Name = "TopPanel"
+        Me.TopPanel.Size = New System.Drawing.Size(415, 53)
+        Me.TopPanel.TabIndex = 100
         '
         'EditUser
         '
@@ -820,22 +876,22 @@ Partial Class EditUser
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.CancelBtn
         Me.ClientSize = New System.Drawing.Size(434, 436)
+        Me.Controls.Add(Me.BottomPanel)
+        Me.Controls.Add(Me.TopPanel)
         Me.Controls.Add(Me.Tabs)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(450, 475)
         Me.Name = "EditUser"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "EditUser"
         Me.Tabs.ResumeLayout(False)
         Me.TabGeneral.ResumeLayout(False)
         Me.TabGeneral.PerformLayout()
-        CType(Me.UserIcon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPassword.ResumeLayout(False)
         Me.TabPassword.PerformLayout()
         CType(Me.warnImg, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.disabledImg, System.ComponentModel.ISupportInitialize).EndInit()
         Me.CopyContextMenu.ResumeLayout(False)
         Me.TabLogon.ResumeLayout(False)
         Me.TabLogon.PerformLayout()
@@ -847,6 +903,9 @@ Partial Class EditUser
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.TabGroups.ResumeLayout(False)
+        CType(Me.UserIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.BottomPanel.ResumeLayout(False)
+        Me.TopPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -894,7 +953,6 @@ Partial Class EditUser
     Friend WithEvents PwNeverExpires As System.Windows.Forms.CheckBox
     Friend WithEvents UserMustChangePwOnNextLogon As System.Windows.Forms.CheckBox
     Friend WithEvents PwNotRequired As System.Windows.Forms.CheckBox
-    Friend WithEvents disabledImg As System.Windows.Forms.PictureBox
     Private WithEvents UserMustChangePasswordInfo As System.Windows.Forms.ToolTip
     Friend WithEvents warnImg As System.Windows.Forms.PictureBox
     Friend WithEvents CopyContextMenu As System.Windows.Forms.ContextMenuStrip
@@ -916,4 +974,7 @@ Partial Class EditUser
     Friend WithEvents AccountNeverExpires As System.Windows.Forms.CheckBox
     Friend WithEvents AccountExpTime As System.Windows.Forms.DateTimePicker
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents BottomPanel As System.Windows.Forms.Panel
+    Friend WithEvents TopPanel As System.Windows.Forms.Panel
+    Friend WithEvents disabledInfo As lusrmgr.TransparentPanel
 End Class

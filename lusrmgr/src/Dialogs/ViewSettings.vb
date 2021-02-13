@@ -78,7 +78,7 @@
 
     Private Sub Reset_Click(sender As Object, e As EventArgs) Handles Reset.Click
         mTop.Checked = True
-        showcommandbar.Checked = False
+        showcommandbar.Checked = True
         showstausbar.Checked = True
 
         QS.SelectedIndex = 0

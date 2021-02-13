@@ -29,14 +29,14 @@
         If searchTerm.Length = 0 Then
 
             If Not mainF.ViewHandler.GetView() = ViewHandler_C.View.MachineRoot Then
-                'Only a refreshItemCount() is needed here, since the sorting is handled automatically for the user and group views
+                'Only a refreshItemCount() is needed here, since the sorting is handled automatically for the other views
                 mainF.ViewHandler.RefreshItemCount()
             Else
-                If Not mainF.ADHandler.currentAD().IsLoading() Then
+                If Not mainF.ADHandler.currentAD.IsLoading() Then
                     mainF.list.Items.Clear()
                     mainF.list.Items.Add("Users", 0)
                     mainF.list.Items.Add("Groups", 1)
-                    If mainF.ADHandler.currentAD().BuiltInPrincipals.Count > 0 Then
+                    If mainF.ADHandler.currentAD.BuiltInPrincipals.Count > 0 Then
                         mainF.list.Items.Add("Built-in security principals", 5)
                     End If
                 End If

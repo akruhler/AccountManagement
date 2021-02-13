@@ -26,7 +26,7 @@ Module Config
             TaskDialog(errWindow, "Configuration error", "Access to registry denied", "The configuration values could not be modified, the access was denied." & vbCrLf & "Please contact your system administrator or run this program with enough privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing)
             Return False
         Catch ex As Exception
-            TaskDialog(errWindow, "An unkown error occurred", "A value could not be written to the registry", ex.Message & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+            TaskDialog(errWindow, "An unkown error occurred", "A value could not be written to the registry", ex.Message, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
             Return False
         End Try
         Return True
@@ -36,7 +36,7 @@ Module Config
         Try
             Return configKey.GetValue(setting, def)
         Catch ex As Exception
-            TaskDialog(IntPtr.Zero, "An unkown error occurred", "A value could not be read from the registry", ex.Message & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+            TaskDialog(IntPtr.Zero, "An unkown error occurred", "A value could not be read from the registry", ex.Message, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
             Return Nothing
         End Try
     End Function
@@ -46,7 +46,7 @@ Module Config
         Try
             Return configKey.GetValue(setting, def)
         Catch ex As Exception
-            TaskDialog(parentWnd.Handle, "An unkown error occurred", "A value could not be read from the registry", ex.Message & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+            TaskDialog(parentWnd.Handle, "An unkown error occurred", "A value could not be read from the registry", ex.Message, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
             Return False
         End Try
     End Function
@@ -56,7 +56,7 @@ Module Config
         Try
             Return configKey.GetValue(setting, def)
         Catch ex As Exception
-            TaskDialog(parentWnd.Handle, "An unkown error occurred", "A value could not be read from the registry", ex.Message & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+            TaskDialog(parentWnd.Handle, "An unkown error occurred", "A value could not be read from the registry", ex.Message, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
             Return 0
         End Try
     End Function
@@ -65,7 +65,7 @@ Module Config
         Try
             Return configKey.GetValue(setting, def)
         Catch ex As Exception
-            TaskDialog(IntPtr.Zero, "An unkown error occurred", "A value could not be read from the registry", ex.Message & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+            TaskDialog(IntPtr.Zero, "An unkown error occurred", "A value could not be read from the registry", ex.Message, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
             Return 0
         End Try
     End Function

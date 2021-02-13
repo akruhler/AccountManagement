@@ -34,6 +34,10 @@ Partial Class MainForm
         Me.cCollapse = New System.Windows.Forms.ToolStripMenuItem()
         Me.Icons = New System.Windows.Forms.ImageList(Me.components)
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.tw = New lusrmgr.TreeView()
+        Me.list = New lusrmgr.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ListContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cOpen = New System.Windows.Forms.ToolStripMenuItem()
@@ -90,10 +94,6 @@ Partial Class MainForm
         Me.QSBar = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.QSearch = New System.Windows.Forms.ToolStripTextBox()
-        Me.tw = New lusrmgr.TreeView()
-        Me.list = New lusrmgr.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TwContextMenu.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -185,6 +185,57 @@ Partial Class MainForm
         Me.SplitContainer1.Size = New System.Drawing.Size(788, 325)
         Me.SplitContainer1.SplitterDistance = 261
         Me.SplitContainer1.TabIndex = 1
+        '
+        'tw
+        '
+        Me.tw.BackColor = System.Drawing.SystemColors.Window
+        Me.tw.ContextMenuStrip = Me.TwContextMenu
+        Me.tw.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tw.HideSelection = False
+        Me.tw.HotTracking = True
+        Me.tw.ImageIndex = 0
+        Me.tw.ImageList = Me.Icons
+        Me.tw.LabelEdit = True
+        Me.tw.Location = New System.Drawing.Point(0, 0)
+        Me.tw.Name = "tw"
+        TreeNode1.ImageIndex = 4
+        TreeNode1.Name = "Knoten0"
+        TreeNode1.SelectedImageIndex = 4
+        TreeNode1.Text = "Local users and groups on"
+        Me.tw.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1})
+        Me.tw.SelectedImageIndex = 0
+        Me.tw.ShowLines = False
+        Me.tw.ShowNodeToolTips = True
+        Me.tw.Size = New System.Drawing.Size(261, 325)
+        Me.tw.TabIndex = 0
+        '
+        'list
+        '
+        Me.list.BackColor = System.Drawing.SystemColors.Window
+        Me.list.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.list.ContextMenuStrip = Me.ListContextMenu
+        Me.list.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.list.FullRowSelect = True
+        Me.list.LabelEdit = True
+        Me.list.LabelWrap = False
+        Me.list.Location = New System.Drawing.Point(0, 0)
+        Me.list.Name = "list"
+        Me.list.ShowItemToolTips = True
+        Me.list.Size = New System.Drawing.Size(523, 325)
+        Me.list.SmallImageList = Me.Icons
+        Me.list.TabIndex = 0
+        Me.list.UseCompatibleStateImageBehavior = False
+        Me.list.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Name"
+        Me.ColumnHeader1.Width = 519
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "SID"
+        Me.ColumnHeader2.Width = 0
         '
         'ListContextMenu
         '
@@ -288,7 +339,8 @@ Partial Class MainForm
         Me.WarningIndicator.Image = Global.lusrmgr.My.Resources.Resources.Warning
         Me.WarningIndicator.Name = "WarningIndicator"
         Me.WarningIndicator.Size = New System.Drawing.Size(101, 20)
-        Me.WarningIndicator.Text = "1 warning(s)"
+        Me.WarningIndicator.Text = "0 warning(s)"
+        Me.WarningIndicator.Visible = False
         '
         'MenuStrip1
         '
@@ -624,57 +676,6 @@ Partial Class MainForm
         '
         Me.QSearch.Name = "QSearch"
         Me.QSearch.Size = New System.Drawing.Size(150, 25)
-        '
-        'tw
-        '
-        Me.tw.BackColor = System.Drawing.SystemColors.Window
-        Me.tw.ContextMenuStrip = Me.TwContextMenu
-        Me.tw.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tw.HideSelection = False
-        Me.tw.HotTracking = True
-        Me.tw.ImageIndex = 0
-        Me.tw.ImageList = Me.Icons
-        Me.tw.LabelEdit = True
-        Me.tw.Location = New System.Drawing.Point(0, 0)
-        Me.tw.Name = "tw"
-        TreeNode1.ImageIndex = 4
-        TreeNode1.Name = "Knoten0"
-        TreeNode1.SelectedImageIndex = 4
-        TreeNode1.Text = "Local users and groups on"
-        Me.tw.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1})
-        Me.tw.SelectedImageIndex = 0
-        Me.tw.ShowLines = False
-        Me.tw.ShowNodeToolTips = True
-        Me.tw.Size = New System.Drawing.Size(261, 325)
-        Me.tw.TabIndex = 0
-        '
-        'list
-        '
-        Me.list.BackColor = System.Drawing.SystemColors.Window
-        Me.list.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.list.ContextMenuStrip = Me.ListContextMenu
-        Me.list.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.list.FullRowSelect = True
-        Me.list.LabelEdit = True
-        Me.list.LabelWrap = False
-        Me.list.Location = New System.Drawing.Point(0, 0)
-        Me.list.Name = "list"
-        Me.list.ShowItemToolTips = True
-        Me.list.Size = New System.Drawing.Size(523, 325)
-        Me.list.SmallImageList = Me.Icons
-        Me.list.TabIndex = 0
-        Me.list.UseCompatibleStateImageBehavior = False
-        Me.list.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Name"
-        Me.ColumnHeader1.Width = 519
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "SID"
-        Me.ColumnHeader2.Width = 0
         '
         'MainForm
         '

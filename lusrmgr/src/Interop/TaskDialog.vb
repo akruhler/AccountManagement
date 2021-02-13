@@ -39,7 +39,7 @@ Module TASKDIALOG_
         Try
             TaskDialogIndirect(tdc, pnButton, a, b)
         Catch ex As Exception
-            MessageBox.Show("An error occurred whilst trying to show a TaskDialog. Falling back to MessageBox function." & vbCrLf & ex.Message & vbCrLf & "HRESULT: " & ex.HResult & vbCrLf & "Please report this issue to the developer.", "Error on TaskDialog", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("An error occurred whilst trying to show a TaskDialog. Falling back to MessageBox function." & vbCrLf & ex.Message & vbCrLf & "HRESULT: " & ex.HResult, "Error on TaskDialog", MessageBoxButtons.OK, MessageBoxIcon.Error)
             MessageBox.Show(pszContent, pszMainInstruction, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub

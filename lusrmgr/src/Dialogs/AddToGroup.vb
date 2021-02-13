@@ -103,7 +103,7 @@ Public Class AddToGroup
                     dstListView.Items.Add(item.Clone())
 
                 Catch ex As UnauthorizedAccessException
-                    ShowPermissionDeniedErr(Handle)
+                    ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                     Return
                 Catch ex As Runtime.InteropServices.COMException
                     If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, item.Text) <> COMErrResult.LOOP_CONTINUE Then
@@ -128,7 +128,7 @@ Public Class AddToGroup
                     dstListView.Items.Add(group.Name, 1)
 
                 Catch ex As UnauthorizedAccessException
-                    ShowPermissionDeniedErr(Handle)
+                    ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
                     Return
                 Catch ex As Runtime.InteropServices.COMException
                     If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, item.Text) <> COMErrResult.LOOP_CONTINUE Then

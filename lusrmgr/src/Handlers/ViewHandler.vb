@@ -3,6 +3,7 @@
 
     Public Sub New(mainForm As MainForm)
         mainF = mainForm
+        AddHandler mainF.ADHandler.CurrentADChanged, AddressOf RefreshWarnings
     End Sub
 
     Private currentView As View
@@ -75,8 +76,8 @@
 
 #Region "Status bar warnings"
 
-    Private Sub RefreshWarnings()
-        Dim Warnings As List(Of ADWarning) = mainF.ADHandler.currentAD().Warnings
+    Public Sub RefreshWarnings()
+        Dim Warnings As List(Of ADWarning) = mainF.ADHandler.currentAD.Warnings
         mainF.WarningIndicator.DropDownItems.Clear()
 
         Select Case Warnings.Count
@@ -129,6 +130,7 @@
         mainF.list.ListViewItemSorter = Nothing
         mainF.list.Items.Clear()
         mainF.QuickSearch.ClearQuickSearch(True)
+        mainF.ADHandler.UpdateCurrentAD()
 
         Select Case newView
             Case View.Users
@@ -138,7 +140,7 @@
                 mainF.list.Columns(0).Width = mainF.list.Width - mainF.list.Columns(1).Width
                 mainF.list.Columns(1).Text = "Full name"
 
-                For Each User In mainF.ADHandler.currentAD().UserList
+                For Each User In mainF.ADHandler.currentAD.UserList
                     mainF.list.Items.Add(New ListViewItem({User.Key, User.Value}, 0)).Name = User.Key
                 Next
 
@@ -150,7 +152,7 @@
 
                 mainF.list.Sorting = SortOrder.Ascending
 
-                For Each Group As String In mainF.ADHandler.currentAD().GroupList
+                For Each Group As String In mainF.ADHandler.currentAD.GroupList
                     mainF.list.Items.Add(Group, Group, 1)
                 Next
 
@@ -170,7 +172,7 @@
                 mainF.list.Sorting = SortOrder.Ascending
                 mainF.list.ListViewItemSorter = New ListViewSIDSorter
 
-                For Each Principal As BuiltInPrincipal In mainF.ADHandler.currentAD().BuiltInPrincipals
+                For Each Principal As BuiltInPrincipal In mainF.ADHandler.currentAD.BuiltInPrincipals
                     mainF.list.Items.Add(New ListViewItem({Principal.Name, Principal.SID}, 1)).Name = Principal.Name
                 Next
 
@@ -181,10 +183,10 @@
                 mainF.list.MultiSelect = False
                 mainF.list.Sorting = SortOrder.None
 
-                If mainF.ADHandler.currentAD() IsNot Nothing AndAlso Not mainF.ADHandler.currentAD().IsLoading() Then
+                If mainF.ADHandler.currentAD IsNot Nothing AndAlso Not mainF.ADHandler.currentAD.IsLoading() Then
                     mainF.list.Items.Add("Users", 0)
                     mainF.list.Items.Add("Groups", 1)
-                    If mainF.ADHandler.currentAD().BuiltInPrincipals.Count > 0 Then
+                    If mainF.ADHandler.currentAD.BuiltInPrincipals.Count > 0 Then
                         mainF.list.Items.Add("Built-in security principals", 5)
                     End If
                     mainF.PropertyHandler.CanCreateNew = True
@@ -197,7 +199,6 @@
                 HideItemCounters()
         End Select
 
-        RefreshWarnings()
         mainF.MenuHandler.UpdateMenuControls()
     End Sub
 

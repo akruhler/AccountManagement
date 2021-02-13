@@ -45,20 +45,17 @@ Module COMErr
         TaskDialogIndirect(tdc, 0, 0, 0)
     End Sub
 
-    Sub ShowPermissionDeniedErr(parentWnd As IntPtr)
-        TaskDialog(parentWnd, "Local users and groups", "Access denied", "You are not allowed to perform this operation." & vbCrLf & "Please contact your system administrator or run this program with enough privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
+    Sub ShowPermissionDeniedErr(parentWnd As IntPtr, isConnectedAD As Boolean)
+        If isConnectedAD Then
+            TaskDialog(parentWnd, "Local users and groups", "Access denied", "You are not allowed to perform this operation." & vbCrLf & "Please ensure the account you used to connect has sufficient privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
+        Else
+            TaskDialog(parentWnd, "Local users and groups", "Access denied", "You are not allowed to perform this operation." & vbCrLf & "Please contact your system administrator or run this application with enough privileges.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
+        End If
     End Sub
 
     Sub ShowUnknownErr(parentWnd As IntPtr, exMsg As String, Optional additional As String = "")
-
-        Dim body As String = ""
-
-        If additional = "" Then
-            body = exMsg.Replace(vbCrLf, "") & vbCrLf & "Please report this issue to the developer."
-        Else
-            body = exMsg.Replace(vbCrLf, "") & vbCrLf & additional & vbCrLf & "Please report this issue to the developer."
-        End If
-
+        Dim body As String = exMsg.Replace(vbCrLf, "")
+        If additional <> "" Then body &= vbCrLf & additional
         TaskDialog(parentWnd, "Local users and groups", "An unkown error occurred", body, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing, True)
     End Sub
 
@@ -82,7 +79,7 @@ Module COMErr
 
         tdc.pszWindowTitle = "Local users and groups"
         tdc.pszMainInstruction = "An unkown error occurred"
-        tdc.pszContent = exMsg.Replace(vbCrLf, "") & vbCrLf & vbCrLf & "Error code: 0x" & Hex(errCode) & vbCrLf & "Please report this issue to the developer."
+        tdc.pszContent = exMsg.Replace(vbCrLf, "") & vbCrLf & vbCrLf & "Error code: 0x" & Hex(errCode)
 
         TaskDialogIndirect(tdc, result, 0, 0)
 
@@ -103,31 +100,31 @@ Module COMErr
 
         Select Case errCode
             Case COMErrorCodes.USER_ALREADY_EXISTS
-                TaskDialog(parentWnd, "Local users and groups", "Account already exists", "There is already an account with the same name. Please choose a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Account already exists", "There is already an account with the same name. Please choose a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.GROUP_ALREADY_EXISTS
-                TaskDialog(parentWnd, "Local users and groups", "Group already exists", "There is already a group associated with that name. Please choose a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Group already exists", "There is already a group associated with that name. Please choose a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.PW_POLICY
-                TaskDialog(parentWnd, "Account password", "Password could not be changed", "The password you entered does not meet the password policy requirements. Check the minimum password length, password complexity and password history requirements.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Account password", "Password could not be changed", "The password you entered does not meet the password policy requirements. Check the minimum password length, password complexity and password history requirements.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.ADMIN_DEACTIVATION
-                TaskDialog(parentWnd, "Local users and groups", "Operation disallowed", exMsg.Replace(vbCrLf, ""), TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Operation disallowed", exMsg.Replace(vbCrLf, ""), TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.ILLEGAL_USERNAME
-                TaskDialog(parentWnd, "Local users and groups", "Username could not be changed", "The specified username is invalid. Please use a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Username could not be changed", "The specified username is invalid. Please use a different name.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.BLOCKED_BUILTIN
-                TaskDialog(parentWnd, "Local users and groups", "Operation cannot be performed", "Cannot perform this operation on built-in accounts.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Operation cannot be performed", "Cannot perform this operation on built-in accounts.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.USER_ALREADY_IN_GROUP
-                TaskDialog(parentWnd, "Local users and groups", "User is already member of group", "The user """ & w & """ is already member of the target group and therefore cannot be added.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "User is already member of group", "The user """ & w & """ is already member of the target group and therefore cannot be added.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return COMErrResult.LOOP_CONTINUE
             Case COMErrorCodes.USER_NOT_IN_GROUP
-                TaskDialog(parentWnd, "Local users and groups", "User is not a member of group", "The user """ & w & """ is not a member of the target group and therefore cannot be removed.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "User is not a member of group", "The user """ & w & """ is not a member of the target group and therefore cannot be removed.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_ERROR_ICON, 0, True)
                 Return COMErrResult.LOOP_CONTINUE
             Case COMErrorCodes.RPC_CONNECTION_UNAVAILALBE
-                TaskDialog(parentWnd, "Local users and groups", "Connection unavailable", "The remote procedure call failed. Please check your connection and try again.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Connection unavailable", "The remote procedure call failed. Please check your connection and try again.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, 0, True)
                 Return False
             Case COMErrorCodes.ACCOUNT_INEXISTENT
                 Dim result As Integer

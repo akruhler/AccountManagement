@@ -1,7 +1,7 @@
 ﻿Public Class Times
     Private grid As Dictionary(Of Point, Label)
     Private indeterminateLabels As List(Of Label)
-    Private noUser As Boolean
+    Private noUser, isRemoteAD As Boolean
     Private userp As DirectoryServices.DirectoryEntry
     Private bArr As BitArray
 
@@ -27,8 +27,9 @@
         Return GetByteArray()
     End Function
 
-    Function EditTimes(user As DirectoryServices.DirectoryEntry) As DialogResult
+    Function EditTimes(user As DirectoryServices.DirectoryEntry, pIsRemoteAD As Boolean) As DialogResult
         userp = user
+        isRemoteAD = pIsRemoteAD
 
         bArr = New BitArray(CType(user.IADsU().LoginHours, Byte()))
         DrawGrid(TimeZoneInfo.Local.BaseUtcOffset.Hours)
@@ -251,7 +252,7 @@
                 userp.CommitChanges()
             Catch ex As UnauthorizedAccessException
                 DialogResult = Windows.Forms.DialogResult.None
-                ShowPermissionDeniedErr(Handle)
+                ShowPermissionDeniedErr(Handle, isRemoteAD)
                 Iusr.LoginHours = backup
                 Return
             Catch ex As Runtime.InteropServices.COMException
@@ -279,13 +280,13 @@
 
         tdc.cxWidth = 220
 
-        tdc.pszWindowTitle = "Warning - Local users and groups"
+        tdc.pszWindowTitle = "Access times warning"
         tdc.pszMainInstruction = "Access time restrictions may not be enforced correctly"
         tdc.pszContent = "The defined access times will prevent the user from logging on," & vbCrLf & "but they may not log off the user as they exceed the limit." & vbCrLf & "You may have to install additional software in order to achieve that."
 
         tdc.dwCommonButtons = TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON
         tdc.pszVerificationText = "Do not show this warning again"
-        tdc.pszMainIcon = TD_WARNING
+        tdc.pszMainIcon = TD_WARNING_ICON
 
         Dim verif As Boolean
 

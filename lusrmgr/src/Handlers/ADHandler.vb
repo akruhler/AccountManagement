@@ -3,6 +3,7 @@ Imports System.Runtime.InteropServices
 
 Class ADHandler_C
     Private mainF As MainForm
+    Private _currentAD As ActiveDirectory
 
     Public Sub New(mainForm As MainForm)
         mainF = mainForm
@@ -12,42 +13,45 @@ Class ADHandler_C
         Return mainF.tw.Nodes.Count <> 1
     End Function
 
-    Public ReadOnly Property localAD As ActiveDirectory
+    Public Property localAD As ActiveDirectory
         Get
             Return mainF.tw.Nodes(0).Tag
         End Get
+        Private Set(value As ActiveDirectory)
+            mainF.tw.Nodes(0).Tag = value 'The tag values of the TreeView map to their corresponding AD objects
+        End Set
     End Property
 
-    ''' <summary>
-    ''' Returns the currently selected AD object.
-    ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Function currentAD() As ActiveDirectory
+    Public ReadOnly Property currentAD As ActiveDirectory
+        Get
+            Return _currentAD
+        End Get
+    End Property
+
+    Public Event CurrentADChanged()
+
+    Public Sub UpdateCurrentAD()
         If mainF.ViewHandler.GetView() = ViewHandler_C.View.MachineRoot Then
-            Return mainF.tw.SelectedNode.Tag
+            If _currentAD IsNot mainF.tw.SelectedNode.Tag Then
+                _currentAD = mainF.tw.SelectedNode.Tag
+                RaiseEvent CurrentADChanged()
+            End If
         Else
-            Return mainF.tw.SelectedNode.Parent.Tag
+            If _currentAD IsNot mainF.tw.SelectedNode.Parent.Tag Then
+                _currentAD = mainF.tw.SelectedNode.Parent.Tag
+                RaiseEvent CurrentADChanged()
+            End If
         End If
-    End Function
+    End Sub
 
-    ''' <summary>
-    ''' Returns an AD by its index in the TreeView.
-    ''' </summary>
-    ''' <param name="index"></param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Function getAD(index As Integer)
-        Return mainF.tw.Nodes(index).Tag
-    End Function
-
-    Public Async Function initLocalAD() As Task
+    Public Async Function InitLocalAD() As Task
         Try
             Dim ComputerName As String = Environment.MachineName
             If ComputerName = Nothing Then ComputerName = "Local Computer"
             mainF.tw.Nodes(0).Text = ComputerName & " (loading)"
-            'The tag values of the TreeView map to their corresponding AD objects
-            mainF.tw.Nodes(0).Tag = New ActiveDirectory(mainF)
+
+            _currentAD = New ActiveDirectory(mainF)
+            localAD = _currentAD
 
             While localAD.IsLoading()
                 Await Task.Delay(10)
@@ -68,6 +72,18 @@ Class ADHandler_C
         Catch ex As Exception
             ShowUnknownErr(mainF.Handle, ex.Message)
         End Try
+
+        RaiseEvent CurrentADChanged()
+    End Function
+
+    ''' <summary>
+    ''' Returns an AD by its index in the TreeView.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function getAD(index As Integer)
+        Return mainF.tw.Nodes(index).Tag
     End Function
 
     Enum ObjectType

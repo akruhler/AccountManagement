@@ -16,6 +16,13 @@ Public Class Search
         list.SmallImageList.Images.Add(mainForm.ListIcons.Images(0))
         list.SmallImageList.Images.Add(mainForm.ListIcons.Images(1))
         list.SmallImageList.Images.Add(mainForm.ListIcons.Images(1))
+
+        AddHandler mainForm.ADHandler.CurrentADChanged, Sub()
+                                                            If Not NoAutoRefresh.Checked AndAlso SRangeCurrent.Checked Then
+                                                                currentADObjCount = mainF.ADHandler.currentAD.UserList.Count + mainF.ADHandler.currentAD.GroupList.Count + mainF.ADHandler.currentAD.BuiltInPrincipals.Count
+                                                                SearchConditionsChanged(Nothing, Nothing)
+                                                            End If
+                                                        End Sub
     End Sub
 
     Private Property OnlyLocal As Boolean
@@ -87,15 +94,16 @@ Public Class Search
             End If
             OnlyLocal = False
             list.Groups.Clear()
+            totalObjCount = 0
             'Count the total number of elements to be searched and add a group for each machine
             For Each node As TreeNode In mainF.tw.Nodes
-                Dim AD As ActiveDirectory = node.Tag
+                Dim AD As ActiveDirectory = DirectCast(node.Tag, ActiveDirectory)
                 totalObjCount += AD.UserList.Count + AD.GroupList.Count + AD.BuiltInPrincipals.Count
                 list.Groups.Add(AD.GetID(), AD.GetDisplayName())
             Next
         End If
 
-        currentADObjCount = mainF.ADHandler.currentAD().UserList.Count + mainF.ADHandler.currentAD().GroupList.Count + mainF.ADHandler.currentAD().BuiltInPrincipals.Count
+        currentADObjCount = mainF.ADHandler.currentAD.UserList.Count + mainF.ADHandler.currentAD.GroupList.Count + mainF.ADHandler.currentAD.BuiltInPrincipals.Count
 
         SearchConditionsChanged(Nothing, Nothing)
     End Sub
@@ -148,7 +156,7 @@ Public Class Search
 
         'Select the TreeView node
         For Each node As TreeNode In mainF.tw.Nodes
-            If DirectCast(node.Tag, ActiveDirectory).Equals(AD) Then
+            If DirectCast(node.Tag, ActiveDirectory) Is AD Then
                 mainF.tw.SelectedNode = node.Nodes(list.SelectedItems(0).ImageIndex)
                 wasFound = True
             End If
@@ -188,7 +196,7 @@ Public Class Search
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Function useInterval() As Boolean
+    Private Function UseInterval() As Boolean
         If SRangeAll.Checked Then
             If totalObjCount > 600 Then
                 Return True
@@ -210,7 +218,7 @@ Public Class Search
         If SRangeAll.Checked Then
             SearchAll()
         Else
-            Search(mainF.ADHandler.currentAD())
+            Search(mainF.ADHandler.currentAD)
         End If
 
         PictureBox1.Hide()
@@ -218,7 +226,7 @@ Public Class Search
         UpdateResultCounter()
     End Sub
 
-    Private Sub SearchConditionsChanged(sender As Object, e As EventArgs) Handles SearchBox.TextChanged, SearchUsers.CheckedChanged, SearchGroups.CheckedChanged, SearchBuiltin.CheckedChanged, SRangeAll.CheckedChanged, SRangeCurrent.CheckedChanged
+    Private Sub SearchConditionsChanged(sender As Object, e As EventArgs) Handles SearchBox.TextChanged, SearchUsers.CheckedChanged, SearchGroups.CheckedChanged, SearchBuiltin.CheckedChanged, SRangeAll.CheckedChanged, SRangeCurrent.CheckedChanged, NoAutoRefresh.CheckedChanged
         list.Items.Clear()
 
         If SearchBox.TextLength = 0 Then
@@ -232,7 +240,7 @@ Public Class Search
             Return
         End If
 
-        If useInterval() Then
+        If UseInterval() Then
             SearchInterval.Stop()
             SearchInterval.Start()
             PictureBox1.Show()
@@ -243,7 +251,7 @@ Public Class Search
         If SRangeAll.Checked Then
             SearchAll()
         Else
-            Search(mainF.ADHandler.currentAD())
+            Search(mainF.ADHandler.currentAD)
         End If
 
         UpdateResultCounter()
@@ -270,7 +278,7 @@ Public Class Search
                 InitSearch()
             End If
         ElseIf item.ImageIndex = 2 Then
-            Dim Principal As BuiltInPrincipal = mainF.ADHandler.currentAD().GetPrincipalByName(item.Text)
+            Dim Principal As BuiltInPrincipal = DirectCast(item.Tag, ActiveDirectory).GetPrincipalByName(item.Text)
             TaskDialog(Handle, "Built-in principal information", Principal.Name & vbCrLf & Principal.SID, Principal.Description, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON, My.Resources.usercpl_1.Handle, 0, True, True)
         End If
     End Sub
@@ -344,14 +352,10 @@ Public Class Search
     End Sub
 
     Private Sub ListView1_AfterLabelEdit(sender As Object, e As LabelEditEventArgs) Handles list.AfterLabelEdit
-        If e.Label Is Nothing OrElse e.Label = "" Then
-            e.CancelEdit = True
-            Return
-        End If
+        e.CancelEdit = True
+        If e.Label Is Nothing OrElse e.Label = "" Then Return
 
-        If Not ADHandler_C.RenameInitiated(list.Items(e.Item).Text, e.Label, list.SelectedItems(0).ImageIndex, list.SelectedItems(0).Tag, Handle) Then
-            e.CancelEdit = True
-        Else
+        If ADHandler_C.RenameInitiated(list.Items(e.Item).Text, e.Label, list.SelectedItems(0).ImageIndex, list.SelectedItems(0).Tag, Handle) Then
             SearchConditionsChanged(Nothing, Nothing)
         End If
     End Sub
@@ -363,7 +367,11 @@ Public Class Search
 
     Private Sub cCopySID_Click(sender As Object, e As EventArgs) Handles cCopySID.Click
         If list.SelectedItems.Count <> 1 OrElse list.SelectedItems(0).ImageIndex <> 2 Then Return
-        Clipboard.SetText(mainF.ADHandler.currentAD().GetPrincipalByName(list.SelectedItems(0).Text).SID)
+        Clipboard.SetText(DirectCast(list.SelectedItems(0).Tag, ActiveDirectory).GetPrincipalByName(list.SelectedItems(0).Text).SID)
+    End Sub
+
+    Private Sub UpdateAutoRefreshCheckBox(sender As Object, e As EventArgs) Handles SRangeCurrent.CheckedChanged
+        NoAutoRefresh.Enabled = SRangeCurrent.Checked
     End Sub
 
     Private Sub cDelete_Click(sender As Object, e As EventArgs) Handles cDelete.Click

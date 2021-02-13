@@ -2,8 +2,8 @@
 Imports DsEntry = System.DirectoryServices.DirectoryEntry
 Public Class MainForm
 
-    Friend ViewHandler As New ViewHandler_C(Me)
     Friend ADHandler As New ADHandler_C(Me)
+    Friend ViewHandler As New ViewHandler_C(Me)
     Friend MenuHandler As New MenuHandler_C(Me)
     Friend QuickSearch As New QuickSearch_C(Me)
     Friend PropertyHandler As New PropertyHandler_C(Me)
@@ -109,7 +109,7 @@ Public Class MainForm
 
     Private Async Sub MainFormLoad(sender As Object, e As EventArgs) Handles MyBase.Load
         MenuHandler.PerformMenuRendering()
-        Await ADHandler.initLocalAD()
+        Await ADHandler.InitLocalAD()
         If tw.SelectedNode Is Nothing Then tw.SelectedNode = tw.Nodes(0)
         MainTreeView_AfterSelect(Nothing, Nothing)
         ViewHandler.RefreshSearch()
@@ -124,6 +124,7 @@ Public Class MainForm
 #Region "Main tree events"
 
     Private Sub MainTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles tw.AfterSelect
+
         Select Case tw.SelectedNode.ImageIndex
             Case 0
                 ViewHandler.ViewChanged(ViewHandler_C.View.Users)
@@ -161,17 +162,16 @@ Public Class MainForm
     Private Sub tw_BeforeLabelEdit(sender As Object, e As NodeLabelEditEventArgs) Handles tw.BeforeLabelEdit
         If Not isConnectedAD() OrElse Not ViewHandler.GetView() = ViewHandler_C.View.MachineRoot OrElse ViewHandler.GetView() = ViewHandler_C.View.BuiltInPrincipals Then
             e.CancelEdit = True
-            Return
         End If
     End Sub
 
     Private Sub tw_AfterLabelEdit(sender As Object, e As NodeLabelEditEventArgs) Handles tw.AfterLabelEdit
         If e.Label Is Nothing Then Return
 
-        ADHandler.currentAD().ChangeDisplayName(e.Label)
+        ADHandler.currentAD.ChangeDisplayName(e.Label)
 
         e.CancelEdit = True
-        e.Node.Text = ADHandler.currentAD().GetDisplayName()
+        e.Node.Text = ADHandler.currentAD.GetDisplayName()
 
         ViewHandler.RefreshSearch()
     End Sub
@@ -187,12 +187,12 @@ Public Class MainForm
                 tw.SelectedNode = tw.SelectedNode.Nodes.Find(list.SelectedItems(0).Text, False)(0)
             Case ViewHandler_C.View.Users
                 Dim newPropertyWindow As New EditUser
-                newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD())
+                newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD)
             Case ViewHandler_C.View.Groups
                 Dim newPropertyWindow As New EditGroup
-                newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD())
+                newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD)
             Case ViewHandler_C.View.BuiltInPrincipals
-                TaskDialog(Handle, "Built-in principal information", list.SelectedItems(0).Text & vbCrLf & list.SelectedItems(0).SubItems(1).Text, ADHandler.currentAD().GetPrincipalBySID(list.SelectedItems(0).SubItems(1).Text).Description, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON, My.Resources.usercpl_1.Handle, 0, True, True)
+                TaskDialog(Handle, "Built-in principal information", list.SelectedItems(0).Text & vbCrLf & list.SelectedItems(0).SubItems(1).Text, ADHandler.currentAD.GetPrincipalBySID(list.SelectedItems(0).SubItems(1).Text).Description, TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON, My.Resources.usercpl_1.Handle, 0, True, True)
         End Select
     End Sub
 
@@ -206,7 +206,7 @@ Public Class MainForm
             Return
         End If
 
-        If ADHandler_C.RenameInitiated(list.Items(e.Item).Text, e.Label, If(ViewHandler.GetView() = ViewHandler_C.View.Users, 0, 1), ADHandler.currentAD(), Handle) Then
+        If ADHandler_C.RenameInitiated(list.Items(e.Item).Text, e.Label, If(ViewHandler.GetView() = ViewHandler_C.View.Users, 0, 1), ADHandler.currentAD, Handle) Then
             ViewHandler.RefreshItemCount()
         End If
     End Sub
@@ -290,12 +290,12 @@ Public Class MainForm
 
     Private Sub EditUserTS_Click(sender As Object, e As EventArgs) Handles EditUserTS.Click
         Dim newPropertyWindow As New EditUser
-        newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD())
+        newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD)
     End Sub
 
     Private Sub EditGroupTS_Click(sender As Object, e As EventArgs) Handles EditGroupTS.Click
         Dim newPropertyWindow As New EditGroup
-        newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD())
+        newPropertyWindow.Show(list.SelectedItems(0).Text, ADHandler.currentAD)
     End Sub
 
     Private Sub cEdit_Click(sender As Object, e As EventArgs) Handles cEdit.Click, tEdit.Click
@@ -307,38 +307,38 @@ Public Class MainForm
 #Region "Create new"
     Private Sub cCreate_Click(sender As Object, e As EventArgs) Handles cCreate.Click
         If ViewHandler.GetView() = ViewHandler_C.View.Users Then
-            OpenAddUser(ADHandler.currentAD())
+            OpenAddUser(ADHandler.currentAD)
         ElseIf ViewHandler.GetView() = ViewHandler_C.View.Groups Then
-            OpenAddGroup(ADHandler.currentAD())
+            OpenAddGroup(ADHandler.currentAD)
         ElseIf lselc() < 1 Then
             Return
         ElseIf list.SelectedItems(0).Text = "Users" Then
-            OpenAddUser(ADHandler.currentAD())
+            OpenAddUser(ADHandler.currentAD)
         ElseIf list.SelectedItems(0).Text = "Groups" Then
-            OpenAddGroup(ADHandler.currentAD())
+            OpenAddGroup(ADHandler.currentAD)
         End If
     End Sub
 
     Private Sub tAdd_Click(sender As Object, e As EventArgs) Handles tAdd.Click
         If ViewHandler.GetView() = ViewHandler_C.View.Users Then
-            OpenAddUser(ADHandler.currentAD())
+            OpenAddUser(ADHandler.currentAD)
         ElseIf ViewHandler.GetView() = ViewHandler_C.View.Groups Then
-            OpenAddGroup(ADHandler.currentAD())
+            OpenAddGroup(ADHandler.currentAD)
         End If
     End Sub
 
     Private Sub CreateNewUserTS_Click(sender As Object, e As EventArgs) Handles CreateNewUserTS.Click
-        OpenAddUser(ADHandler.currentAD())
+        OpenAddUser(ADHandler.currentAD)
     End Sub
 
     Private Sub CreateNewGroupTS_Click(sender As Object, e As EventArgs) Handles CreateNewGroupTS.Click
-        OpenAddGroup(ADHandler.currentAD())
+        OpenAddGroup(ADHandler.currentAD)
     End Sub
 #End Region
 
 #Region "Delete"
     Private Sub DeleteUserTS_Click(sender As Object, e As EventArgs) Handles DeleteUserTS.Click
-        Dim AD As ActiveDirectory = ADHandler.currentAD()
+        Dim AD As ActiveDirectory = ADHandler.currentAD
         ADHandler.ShowDeleteDialog("user", "users", New ADHandler_C.DeleteAction(Sub(item As ListViewItem)
                                                                                      AD.DeleteUser(item.Text, Handle, False)
                                                                                  End Sub), list.SelectedItems, Handle)
@@ -346,7 +346,7 @@ Public Class MainForm
     End Sub
 
     Private Sub DeleteGroupTS_Click(sender As Object, e As EventArgs) Handles DeleteGroupTS.Click
-        Dim AD As ActiveDirectory = ADHandler.currentAD()
+        Dim AD As ActiveDirectory = ADHandler.currentAD
         ADHandler.ShowDeleteDialog("group", "groups", New ADHandler_C.DeleteAction(Sub(item As ListViewItem)
                                                                                        AD.DeleteGroup(item.Text, Handle, False)
                                                                                    End Sub), list.SelectedItems, Handle)
@@ -363,7 +363,7 @@ Public Class MainForm
 
     Private Sub SetPasswordToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles cSetPassword.Click
         Using pwdlg As New SetPw
-            Dim cAD As ActiveDirectory = ADHandler.currentAD()
+            Dim cAD As ActiveDirectory = ADHandler.currentAD
             Dim user As DsEntry = cAD.FindUser(list.SelectedItems(0).Text, Handle)
             If user IsNot Nothing Then
                 pwdlg.Show(user, cAD)
@@ -378,8 +378,8 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshTS_Click(sender As Object, e As EventArgs) Handles RefreshTS.Click, tRefresh.Click
-        If ADHandler.currentAD().IsLoading() = False Then
-            ADHandler.currentAD().RefreshDS()
+        If ADHandler.currentAD.IsLoading() = False Then
+            ADHandler.currentAD.RefreshDS()
             If Not ViewHandler.GetView() = ViewHandler_C.View.MachineRoot Then ViewHandler.RefreshItemCount()
         End If
     End Sub
@@ -387,10 +387,11 @@ Public Class MainForm
     Private Sub RefreshAll_Click(sender As Object, e As EventArgs) Handles RefreshAll.Click
         For Each node As TreeNode In tw.Nodes
             Dim AD As ActiveDirectory = node.Tag
-            If AD.IsLoading() = False Then
-                AD.RefreshDS()
+            If AD.IsLoading() = False AndAlso AD IsNot ADHandler.currentAD Then
+                AD.RefreshDS(True)
             End If
         Next
+        ADHandler.currentAD.RefreshDS()
 
         If Not ViewHandler.GetView() = ViewHandler_C.View.MachineRoot Then ViewHandler.RefreshItemCount()
     End Sub
@@ -414,7 +415,7 @@ Public Class MainForm
         If ADHandler.areADsConnected Then
             RefreshAll.Visible = True
             RefreshAll.Text = "Refresh all connected machines"
-            RefreshTS.Text = "Refresh users and groups on " & ADHandler.currentAD().GetDisplayName()
+            RefreshTS.Text = "Refresh users and groups on " & ADHandler.currentAD.GetDisplayName()
         Else
             RefreshAll.Visible = False
             RefreshAll.Text = ""
@@ -459,6 +460,8 @@ Public Class MainForm
                         loadingWindow.ControlBox = False
                         loadingWindow.SetText("Waiting for authentication")
 
+                        Dim retry As Boolean = False
+
                         Do
                             Dim WNetConnectResult As SystemErrorCodes = Await WNetConnectAsync(addr, Connect.promptAuth.Checked)
 
@@ -473,11 +476,17 @@ Public Class MainForm
                                     Continue Do
                                 End If
                                 loadingWindow.Close()
-                                Return
+
+                                If WNetConnectResult = SystemErrorCodes.ERROR_CANCELLED OrElse WNetConnectResult = SystemErrorCodes.ERROR_NOT_CONNECTED Then
+                                    Return
+                                Else
+                                    retry = True
+                                End If
                             End If
 
                             Exit Do
                         Loop
+                        If retry Then Continue Do
 
                         '/////// Connect and initialise AD /////////////////
                         loadingWindow.ControlBox = True
@@ -559,8 +568,7 @@ Public Class MainForm
                     End If
                     Dim result As Integer
 
-                    TaskDialog(Handle, "Unkown error", "Could not connect to computer", "An unkown error occurred whilst connecting to the computer." &
-                                vbCrLf & ex.Message & vbCrLf & "Please report this issue to the developer.",
+                    TaskDialog(Handle, "Unkown error", "Could not connect to computer", "An unkown error occurred whilst connecting to the computer." & vbCrLf & ex.Message,
                                 TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON Or TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON, TD_ERROR_ICON, result)
                     If result = IDRETRY Then
                         Continue Do

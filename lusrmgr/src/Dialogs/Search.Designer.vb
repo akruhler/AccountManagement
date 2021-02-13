@@ -46,6 +46,7 @@ Partial Class Search
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.SearchBuiltin = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.NoAutoRefresh = New System.Windows.Forms.CheckBox()
         Me.SRangeCurrent = New System.Windows.Forms.RadioButton()
         Me.SRangeAll = New System.Windows.Forms.RadioButton()
         Me.list = New lusrmgr.ListView()
@@ -260,6 +261,7 @@ Partial Class Search
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.NoAutoRefresh)
         Me.GroupBox2.Controls.Add(Me.SRangeCurrent)
         Me.GroupBox2.Controls.Add(Me.SRangeAll)
         Me.GroupBox2.Location = New System.Drawing.Point(295, 83)
@@ -268,6 +270,18 @@ Partial Class Search
         Me.GroupBox2.TabIndex = 107
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Search range"
+        '
+        'NoAutoRefresh
+        '
+        Me.NoAutoRefresh.AutoSize = True
+        Me.NoAutoRefresh.Enabled = False
+        Me.NoAutoRefresh.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.NoAutoRefresh.Location = New System.Drawing.Point(30, 74)
+        Me.NoAutoRefresh.Name = "NoAutoRefresh"
+        Me.NoAutoRefresh.Size = New System.Drawing.Size(183, 20)
+        Me.NoAutoRefresh.TabIndex = 4
+        Me.NoAutoRefresh.Text = "Do not auto refresh machine"
+        Me.NoAutoRefresh.UseVisualStyleBackColor = True
         '
         'SRangeCurrent
         '
@@ -372,4 +386,5 @@ Partial Class Search
     Friend WithEvents cSeperator As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents cShowBuiltInDetails As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cCopySID As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NoAutoRefresh As System.Windows.Forms.CheckBox
 End Class

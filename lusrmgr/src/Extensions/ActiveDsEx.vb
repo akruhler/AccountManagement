@@ -26,7 +26,11 @@ Module DsEntryEx
     ''' <remarks></remarks>
     <Extension>
     Function IADsU(u As DsEntry) As ActiveDs.IADsUser
-        Return u.NativeObject
+        If u IsNot Nothing Then
+            Return u.NativeObject
+        Else
+            Return Nothing
+        End If
     End Function
 
     ''' <summary>
@@ -38,7 +42,11 @@ Module DsEntryEx
     ''' <remarks></remarks>
     <Extension>
     Function IADsG(g As DsEntry) As ActiveDs.IADsGroup
-        Return g.NativeObject
+        If g IsNot Nothing Then
+            Return g.NativeObject
+        Else
+            Return Nothing
+        End If
     End Function
 
     <Extension>
@@ -87,7 +95,7 @@ Module DsEntryEx
             Marshal.FreeHGlobal(pSID)
             Return strSID
         Else
-            TaskDialog(IntPtr.Zero, "An unknown error occurred", "Error whilst processing SID", "An error occurred whilst converting a SID to a String object." & vbCrLf & "Please report this issue to the developer.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing)
+            TaskDialog(IntPtr.Zero, "An unknown error occurred", "Error whilst processing SID", "An error occurred whilst converting a SID to a String object.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TD_ERROR_ICON, Nothing)
             Return strErr
         End If
     End Function
