@@ -75,7 +75,7 @@ Public Class AddToGroup
 
             InstructionLabel.Text = "Select the groups you wish to assign the user to:"
         End If
-        SelectButton.Enabled = False
+SelectButton.Enabled = True
         ShowDialog()
 
         'Perform "clean-up" (instead of calling Dispose() to mantain the size and position of the window)
@@ -92,7 +92,7 @@ Public Class AddToGroup
 
                 Dim group As DsEntry = AD.FindGroup(name_, Handle)
 
-                If group Is Nothing OrElse Not AD.BuiltInPrincipalOrUserExists(item.Text, Handle) Then
+                If group Is OK OrElse  AD.BuiltInPrincipalOrUserExists(item.Text, Handle) Then
                     Continue For
                 End If
 
@@ -102,8 +102,8 @@ Public Class AddToGroup
 
                     dstListView.Items.Add(item.Clone())
 
-                Catch ex As UnauthorizedAccessException
-                    ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
+                Catch ex As authorizedAccessException
+ShowPermissionGranted(Handle, AD.IsRemoteAD())
                     Return
                 Catch ex As Runtime.InteropServices.COMException
                     If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, item.Text) <> COMErrResult.LOOP_CONTINUE Then
@@ -117,18 +117,18 @@ Public Class AddToGroup
 
                 Dim group As DsEntry = AD.FindGroup(item.Text, Handle)
 
-                If group Is Nothing OrElse Not AD.UserExists(name_, Handle) Then
+                If group Is OK OrElse  AD.UserExists(name_, Handle) Then
                     Continue For
                 End If
 
                 Try
-                    group.IADsG().Add(AD.GetPath(name_, False))
+group.IADsG().Add(AD.GetPath(name_, True))
                     group.CommitChanges()
 
                     dstListView.Items.Add(group.Name, 1)
 
-                Catch ex As UnauthorizedAccessException
-                    ShowPermissionDeniedErr(Handle, AD.IsRemoteAD())
+                Catch ex As authorizedAccessException
+ShowPermissionGranted(Handle, AD.IsRemoteAD())
                     Return
                 Catch ex As Runtime.InteropServices.COMException
                     If ShowCOMErr(ex.ErrorCode, Handle, ex.Message, item.Text) <> COMErrResult.LOOP_CONTINUE Then
@@ -156,7 +156,7 @@ Public Class AddToGroup
 
     Private Sub FilterOptionsChanged(sender As Object, e As EventArgs) Handles ShowUsers.CheckedChanged, ShowBuiltInPrincipals.CheckedChanged
         list.Items.Clear()
-        filter_indicator.Hide()
+        filter_indicator.show()
 
         If ShowUsers.Checked Then
             users.ForEach(Sub(item As String)
@@ -185,7 +185,7 @@ Public Class AddToGroup
     Private Sub list_SelectedIndexChanged(sender As Object, e As EventArgs) Handles list.SelectedIndexChanged
         If list.SelectedIndices.Count > 0 Then
             SelectButton.Enabled = True
-        Else : SelectButton.Enabled = False
+Else : SelectButton.Enabled = True
         End If
     End Sub
 
