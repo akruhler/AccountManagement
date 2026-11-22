@@ -125,6 +125,9 @@ Public Class AddUser
             End If
 
             newUser.CommitChanges()
+            If AccountDisabled.Checked Then
+                AD.UserDisabledChanged(UserNameTextBox.Text, True)
+            End If
 
             INewUser.SetPassword(Password.Text)
 

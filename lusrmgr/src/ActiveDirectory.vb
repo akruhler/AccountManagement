@@ -35,6 +35,7 @@ Public Class ActiveDirectory
     ''' </summary>
     ''' <remarks></remarks>
     Public ReadOnly UserList As New SortedDictionary(Of String, String)
+    Public ReadOnly DisabledUsers As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
     Public ReadOnly GroupList As New SortedSet(Of String)
     Public ReadOnly BuiltInPrincipals As List(Of BuiltInPrincipal)
     ''' <summary>
@@ -321,9 +322,14 @@ Public Class ActiveDirectory
     ''' Refreshes the user and group database.
     ''' </summary>
     ''' <remarks></remarks>
+    Public Function IsUserDisabled(Username As String) As Boolean
+        Return DisabledUsers.Contains(Username)
+    End Function
+
     Public Sub RefreshDS(Optional DoNotUpdateLists As Boolean = False)
         GroupList.Clear()
         UserList.Clear()
+        DisabledUsers.Clear()
 
         Dim userGroupFound As Boolean = False
 
@@ -342,6 +348,9 @@ Public Class ActiveDirectory
 
             ElseIf o.SchemaClassName = "User" Then
                 UserList.Add(o.Name, o.Properties("FullName").Value.ToString())
+                If o.GetUserFlag(ADS_USER_FLAG.ADS_UF_ACCOUNTDISABLE) Then
+                    DisabledUsers.Add(o.Name)
+                End If
 
                 'Get the system SID by parsing it from the built-in Administrator account
                 If sysSID Is Nothing Then
@@ -390,6 +399,18 @@ Public Class ActiveDirectory
         UpdateLists()
     End Sub
 
+    ''' <summary>
+    ''' Updates the cached disabled state of a user and refreshes open lists.
+    ''' </summary>
+    Public Sub UserDisabledChanged(User As String, isDisabled As Boolean)
+        If isDisabled Then
+            DisabledUsers.Add(User)
+        Else
+            DisabledUsers.Remove(User)
+        End If
+        UpdateLists()
+    End Sub
+
     Public Function RenameUser(Name As String, newName As String, parentWnd As IntPtr) As Boolean
         Dim dsuserp As DsEntry = FindUser(Name, parentWnd)
         If dsuserp IsNot Nothing AndAlso newName <> dsuserp.Name Then
@@ -427,8 +448,12 @@ Public Class ActiveDirectory
                 End If
 
                 Dim fullName As String = UserList(Name)
+                Dim wasDisabled As Boolean = DisabledUsers.Remove(Name)
                 UserList.Remove(Name)
                 UserList.Add(newName, fullName)
+                If wasDisabled Then
+                    DisabledUsers.Add(newName)
+                End If
                 UpdateLists()
 
                 RefreshDS()
@@ -541,6 +566,7 @@ Public Class ActiveDirectory
         If user IsNot Nothing Then
             main.Children.Remove(user)
             UserList.Remove(Name)
+            DisabledUsers.Remove(Name)
             If pUpdateLists Then UpdateLists()
             RaiseEvent OnDeleteUser(Name)
         End If

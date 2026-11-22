@@ -186,6 +186,7 @@ Public Class EditUser
     Private Sub ApplyButton_Click(sender As Object, e As EventArgs) Handles ApplyButton.Click
 
         Dim FullNameChanged As Boolean = False
+        Dim DisabledChanged As Boolean = (userp.AccountDisabled <> AccountDisabled.Checked)
 
         If userp.FullName <> FullName.Text Then
             FullNameChanged = True
@@ -240,6 +241,9 @@ Public Class EditUser
             If FullNameChanged Then
                 AD.UserFullNameChanged(dsUserp.Name, FullName.Text)
             End If
+            If DisabledChanged Then
+                AD.UserDisabledChanged(dsUserp.Name, AccountDisabled.Checked)
+            End If
             dsUserp.RefreshCache()
         Catch ex As Runtime.InteropServices.COMException
 
@@ -255,6 +259,9 @@ Public Class EditUser
                         dsUserp.CommitChanges()
                         If FullNameChanged Then
                             AD.UserFullNameChanged(dsUserp.Name, FullName.Text)
+                        End If
+                        If DisabledChanged Then
+                            AD.UserDisabledChanged(dsUserp.Name, AccountDisabled.Checked)
                         End If
                         dsUserp.RefreshCache()
                     Catch exx As Runtime.InteropServices.COMException
