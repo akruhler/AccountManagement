@@ -318,14 +318,14 @@ Public Class ActiveDirectory
     End Function
 #End Region
 
-    ''' <summary>
-    ''' Refreshes the user and group database.
-    ''' </summary>
-    ''' <remarks></remarks>
     Public Function IsUserDisabled(Username As String) As Boolean
         Return DisabledUsers.Contains(Username)
     End Function
 
+    ''' <summary>
+    ''' Refreshes the user and group database.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub RefreshDS(Optional DoNotUpdateLists As Boolean = False)
         GroupList.Clear()
         UserList.Clear()

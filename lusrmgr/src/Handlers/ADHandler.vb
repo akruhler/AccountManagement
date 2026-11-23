@@ -101,7 +101,7 @@ Class ADHandler_C
 
         If objectType = ADHandler_C.ObjectType.User Then
             If newName.Length > 20 Then
-                TaskDialog(parentWnd, "Local users and groups", "Too long username", "The length of an username must not be longer than 20 characters.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_WARNING_ICON, 0)
+                TaskDialog(parentWnd, "Local users and groups", "Username exceeds maximum length", "The length of a username must not be longer than 20 characters.", TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON, TASKDIALOG_ICONS.TD_WARNING_ICON, 0)
                 Return False
             Else
                 Return AD.RenameUser(oldName, newName, parentWnd)

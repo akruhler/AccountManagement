@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.Drawing.Imaging
+Imports System.Runtime.InteropServices
 Imports DsEntry = System.DirectoryServices.DirectoryEntry
 Public Class MainForm
 
@@ -31,7 +32,25 @@ Public Class MainForm
             Using bmp As New Bitmap(iconSize.Width, iconSize.Height, Imaging.PixelFormat.Format32bppArgb)
                 Using g As Graphics = Graphics.FromImage(bmp)
                     g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-                    g.DrawImage(baseIcon, 0, 0, iconSize.Width, iconSize.Height)
+                    Using attributes As New ImageAttributes()
+                        Dim grayscaleMatrix As New ColorMatrix(
+                        New Single()() {
+                            New Single() {0.299F, 0.299F, 0.299F, 0, 0},
+                            New Single() {0.587F, 0.587F, 0.587F, 0, 0},
+                            New Single() {0.114F, 0.114F, 0.114F, 0, 0},
+                            New Single() {0, 0, 0, 1, 0},
+                            New Single() {0, 0, 0, 0, 1}
+                        })
+
+                        attributes.SetColorMatrix(grayscaleMatrix)
+
+                        g.DrawImage(
+                        baseIcon,
+                        New Rectangle(0, 0, iconSize.Width, iconSize.Height),
+                        0, 0, iconSize.Width, iconSize.Height,
+                        GraphicsUnit.Pixel,
+                        attributes)
+                    End Using
 
                     Dim badgeDiameter As Integer = Math.Max(7, iconSize.Width \ 2)
                     Dim badgeRect As New Rectangle(
