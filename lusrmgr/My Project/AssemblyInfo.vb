@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Die Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyTitle("Local user and group management")> 
+<Assembly: AssemblyTitle("Local User and Group Management")>
 <Assembly: AssemblyDescription("Tool which allows an easy management of users and groups on local and remote computers.")> 
-<Assembly: AssemblyCompany("A. Krühler")> 
-<Assembly: AssemblyProduct("Local user and group management")> 
-<Assembly: AssemblyCopyright("Copyright © 2017-2020 A. Krühler")> 
+<Assembly: AssemblyCompany("A. Krühler")>
+<Assembly: AssemblyProduct("Local User and Group Management")>
+<Assembly: AssemblyCopyright("Copyright © 2017-2026 A. Krühler")>
 <Assembly: AssemblyTrademark("A. Krühler")> 
 
 <Assembly: ComVisible(False)>
 
 'Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-<Assembly: Guid("7b7001ed-7468-42be-9ea5-f8c852bc7749")> 
+<Assembly: Guid("7b7001ed-7468-42be-9ea5-f8c852bc7749")>
 
 ' Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.6.3.0")> 
-<Assembly: AssemblyFileVersion("1.6.3.0")> 
+<Assembly: AssemblyVersion("1.6.4.0")>
+<Assembly: AssemblyFileVersion("1.6.4.0")>

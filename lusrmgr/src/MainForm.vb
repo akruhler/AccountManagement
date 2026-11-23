@@ -11,19 +11,24 @@ Public Class MainForm
 
     Friend SearchWindow As Search
     Friend Shared ListIcons As ImageList
-    Friend Const DISABLED_USER_ICON_INDEX As Integer = 6
+
+    Friend Enum EnumIcons
+        User = 0
+        Group = 1
+        UserDisabled = 6
+    End Enum
 
     Public Sub New()
         InitializeComponent()
-        EnsureDisabledUserIcon(Icons)
+        AddDisabledUserIcon(Icons)
         ListIcons = Icons
     End Sub
 
     ''' <summary>
-    ''' Creates a disabled user icon with a red badge overlaid on the base user icon.
+    ''' Creates a grayscale disabled user icon with a red badge overlaid on the base user icon.
     ''' </summary>
-    Private Shared Sub EnsureDisabledUserIcon(imageList As ImageList)
-        If imageList Is Nothing OrElse imageList.Images.Count = 0 OrElse imageList.Images.Count > DISABLED_USER_ICON_INDEX Then
+    Private Shared Sub AddDisabledUserIcon(imageList As ImageList)
+        If imageList Is Nothing OrElse imageList.Images.Count = 0 Then
             Return
         End If
 

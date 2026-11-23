@@ -5,13 +5,19 @@
         CopyContextMenu.Renderer = New clsMenuRenderer()
     End Sub
 
+    Private Sub About_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Copyright.Text = My.Application.Info.Copyright
+        Version.Text = "Version " & My.Application.Info.Version.ToString().Substring(0, My.Application.Info.Version.ToString().LastIndexOf(".")) & " (" & If(Environment.Is64BitProcess, "x64", "x86") & ")"
+        DevelopedBy.Text = "Developed by " & My.Application.Info.CompanyName
+    End Sub
+
     Private Sub GitHubLink_Click(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles GitHubLink.LinkClicked
         If e.Button = Windows.Forms.MouseButtons.Right Then Return
-        Process.Start("https://github.com/proviq/lusrmgr/")
+        Process.Start("https://github.com/akruhler/AccountManagement/")
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
-        Clipboard.SetText("https://github.com/proviq/lusrmgr")
+        Clipboard.SetText("https://github.com/akruhler/AccountManagement/")
     End Sub
 
 #Region "Icon credits window"

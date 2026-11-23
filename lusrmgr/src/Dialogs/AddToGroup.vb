@@ -45,7 +45,7 @@ Public Class AddToGroup
 
             If ShowUsers.Checked Then
                 users.ForEach(Sub(item As String)
-                                  Dim iconIndex As Integer = If(AD.IsUserDisabled(item), MainForm.DISABLED_USER_ICON_INDEX, 0)
+                                  Dim iconIndex As Integer = If(AD.IsUserDisabled(item), MainForm.EnumIcons.UserDisabled, MainForm.EnumIcons.User)
                                   list.Items.Add(item, iconIndex)
                               End Sub)
             Else
@@ -161,7 +161,7 @@ Public Class AddToGroup
 
         If ShowUsers.Checked Then
             users.ForEach(Sub(item As String)
-                              Dim iconIndex As Integer = If(AD.IsUserDisabled(item), MainForm.DISABLED_USER_ICON_INDEX, 0)
+                              Dim iconIndex As Integer = If(AD.IsUserDisabled(item), MainForm.EnumIcons.UserDisabled, MainForm.EnumIcons.User)
                               list.Items.Add(item, iconIndex)
                           End Sub)
         Else

@@ -2,10 +2,16 @@
 Public Class Search
     Private currentADObjCount, totalObjCount As UInteger
     Private mainF As MainForm
-    Private Const DISABLED_USER_SEARCH_ICON_INDEX As Integer = 3
 
-    Private Shared Function IsUserSearchIcon(imageIndex As Integer) As Boolean
-        Return imageIndex = 0 OrElse imageIndex = DISABLED_USER_SEARCH_ICON_INDEX
+    Private Enum EnumIcons
+        User = 0
+        Group = 1
+        BuiltInPrincipal = 2
+        UserDisabled = 3
+    End Enum
+
+    Private Shared Function IsUserIcon(imageIndex As Integer) As Boolean
+        Return imageIndex = EnumIcons.User OrElse imageIndex = EnumIcons.UserDisabled
     End Function
 
     Public Sub New(mainForm As MainForm)
@@ -18,10 +24,10 @@ Public Class Search
         list.SmallImageList = New ImageList()
         list.SmallImageList.ColorDepth = ColorDepth.Depth32Bit
         list.SmallImageList.ImageSize = New Size(19, 19)
-        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(0))
-        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(1))
-        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(1))
-        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(MainForm.DISABLED_USER_ICON_INDEX))
+        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(MainForm.EnumIcons.User))
+        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(MainForm.EnumIcons.Group))
+        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(MainForm.EnumIcons.Group))
+        list.SmallImageList.Images.Add(MainForm.ListIcons.Images(MainForm.EnumIcons.UserDisabled))
 
         AddHandler mainForm.ADHandler.CurrentADChanged, Sub()
                                                             If Not NoAutoRefresh.Checked AndAlso SRangeCurrent.Checked Then
@@ -125,7 +131,7 @@ Public Class Search
             For Each user As KeyValuePair(Of String, String) In AD.UserList
                 If user.Key.ToLower().Contains(SearchBox.Text.ToLower()) OrElse user.Value.ToLower().Contains(SearchBox.Text.ToLower()) Then
                     'If a match has been found, add the item and set its "Tag" property to its AD object
-                    Dim iconIndex As Integer = If(AD.IsUserDisabled(user.Key), DISABLED_USER_SEARCH_ICON_INDEX, 0)
+                    Dim iconIndex As Integer = If(AD.IsUserDisabled(user.Key), EnumIcons.UserDisabled, EnumIcons.User)
                     list.Items.Add(New ListViewItem(New String() {user.Key, AD.GetDisplayName()}, iconIndex, list.Groups(AD.GetID()))).Tag = AD
                     Continue For
                 End If
@@ -135,7 +141,7 @@ Public Class Search
         If SearchGroups.Checked Then
             For Each group As String In AD.GroupList
                 If group.ToLower().Contains(SearchBox.Text.ToLower()) Then
-                    list.Items.Add(New ListViewItem(New String() {group, AD.GetDisplayName()}, 1, list.Groups(AD.GetID()))).Tag = AD
+                    list.Items.Add(New ListViewItem(New String() {group, AD.GetDisplayName()}, EnumIcons.Group, list.Groups(AD.GetID()))).Tag = AD
                 End If
             Next
         End If
@@ -143,7 +149,7 @@ Public Class Search
         If SearchBuiltin.Checked Then
             For Each principal As BuiltInPrincipal In AD.BuiltInPrincipals
                 If principal.Name.ToLower().Contains(SearchBox.Text.ToLower()) OrElse principal.SID.ToLower().Contains(SearchBox.Text.ToLower()) Then
-                    list.Items.Add(New ListViewItem(New String() {principal.Name, AD.GetDisplayName()}, 2, list.Groups(AD.GetID()))).Tag = AD
+                    list.Items.Add(New ListViewItem(New String() {principal.Name, AD.GetDisplayName()}, EnumIcons.BuiltInPrincipal, list.Groups(AD.GetID()))).Tag = AD
                 End If
             Next
         End If
@@ -162,7 +168,7 @@ Public Class Search
         Dim wasFound As Boolean = False
 
         'Select the TreeView node
-        Dim nodeIndex As Integer = If(IsUserSearchIcon(list.SelectedItems(0).ImageIndex), 0, list.SelectedItems(0).ImageIndex)
+        Dim nodeIndex As Integer = If(IsUserIcon(list.SelectedItems(0).ImageIndex), 0, list.SelectedItems(0).ImageIndex)
         For Each node As TreeNode In mainF.tw.Nodes
             If DirectCast(node.Tag, ActiveDirectory) Is AD Then
                 mainF.tw.SelectedNode = node.Nodes(nodeIndex)
@@ -271,7 +277,7 @@ Public Class Search
         Dim item As ListViewItem = list.SelectedItems(0)
 
         'Determine if the selected object is a user or a group
-        If IsUserSearchIcon(item.ImageIndex) Then
+        If IsUserIcon(item.ImageIndex) Then
             Dim newPropertyWindow As New EditUser
 
             If Not newPropertyWindow.Show(item.Text, item.Tag) Then
@@ -363,7 +369,7 @@ Public Class Search
         e.CancelEdit = True
         If e.Label Is Nothing OrElse e.Label = "" Then Return
 
-        Dim objType As ADHandler_C.ObjectType = If(IsUserSearchIcon(list.SelectedItems(0).ImageIndex), ADHandler_C.ObjectType.User, ADHandler_C.ObjectType.Group)
+        Dim objType As ADHandler_C.ObjectType = If(IsUserIcon(list.SelectedItems(0).ImageIndex), ADHandler_C.ObjectType.User, ADHandler_C.ObjectType.Group)
         If ADHandler_C.RenameInitiated(list.Items(e.Item).Text, e.Label, objType, list.SelectedItems(0).Tag, Handle) Then
             SearchConditionsChanged(Nothing, Nothing)
         End If
@@ -394,7 +400,7 @@ Public Class Search
         mainF.ADHandler.ShowDeleteDialog("object", "objects", Sub(item As ListViewItem)
                                                                   Dim AD As ActiveDirectory = DirectCast(item.Tag, ActiveDirectory)
 
-                                                                  If IsUserSearchIcon(item.ImageIndex) Then
+                                                                  If IsUserIcon(item.ImageIndex) Then
                                                                       If AD.UserExists(item.Text, Handle) Then
                                                                           AD.DeleteUser(item.Text, Handle, False)
                                                                       End If

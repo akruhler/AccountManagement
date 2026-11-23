@@ -25,11 +25,10 @@ Partial Class About
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(About))
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.DevelopedBy = New System.Windows.Forms.Label()
         Me.CloseButton = New System.Windows.Forms.Button()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Copyright = New System.Windows.Forms.Label()
+        Me.Version = New System.Windows.Forms.Label()
         Me.GitHubLink = New System.Windows.Forms.LinkLabel()
         Me.CopyContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -40,22 +39,24 @@ Partial Class About
         'Label1
         '
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 17.0!)
-        Me.Label1.Location = New System.Drawing.Point(0, 11)
+        Me.Label1.Location = New System.Drawing.Point(0, 14)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(451, 41)
+        Me.Label1.Size = New System.Drawing.Size(601, 50)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Local User and Group Management"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label2
+        'DevelopedBy
         '
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.Label2.Location = New System.Drawing.Point(-1, 93)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(452, 39)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Developed by: A. Krühler"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.DevelopedBy.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.DevelopedBy.Location = New System.Drawing.Point(-1, 114)
+        Me.DevelopedBy.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.DevelopedBy.Name = "DevelopedBy"
+        Me.DevelopedBy.Size = New System.Drawing.Size(603, 48)
+        Me.DevelopedBy.TabIndex = 1
+        Me.DevelopedBy.Text = "Developed by: A. Krühler"
+        Me.DevelopedBy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'CloseButton
         '
@@ -63,53 +64,46 @@ Partial Class About
         Me.CloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CloseButton.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.CloseButton.Location = New System.Drawing.Point(359, 177)
+        Me.CloseButton.Location = New System.Drawing.Point(479, 218)
+        Me.CloseButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CloseButton.Name = "CloseButton"
-        Me.CloseButton.Size = New System.Drawing.Size(84, 29)
+        Me.CloseButton.Size = New System.Drawing.Size(112, 36)
         Me.CloseButton.TabIndex = 0
         Me.CloseButton.Text = "Close"
         Me.CloseButton.UseVisualStyleBackColor = True
         '
-        'Label3
+        'Copyright
         '
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label3.Location = New System.Drawing.Point(0, 192)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(454, 26)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "© 2017-2020 A. Krühler"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Copyright.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Copyright.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Copyright.Location = New System.Drawing.Point(0, 236)
+        Me.Copyright.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Copyright.Name = "Copyright"
+        Me.Copyright.Size = New System.Drawing.Size(605, 32)
+        Me.Copyright.TabIndex = 7
+        Me.Copyright.Text = "© 2017-2026 A. Krühler"
+        Me.Copyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label4
+        'Version
         '
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 15.0!)
-        Me.Label4.Location = New System.Drawing.Point(-1, 51)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(452, 39)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Version 1.6.3 (x86)"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.Label5.Location = New System.Drawing.Point(101, 135)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(184, 21)
-        Me.Label5.TabIndex = 9
-        Me.Label5.Text = "Contact the developer on"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Version.Font = New System.Drawing.Font("Segoe UI", 15.0!)
+        Me.Version.Location = New System.Drawing.Point(-1, 63)
+        Me.Version.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Version.Name = "Version"
+        Me.Version.Size = New System.Drawing.Size(603, 48)
+        Me.Version.TabIndex = 8
+        Me.Version.Text = "Version 1.6.4 (x86)"
+        Me.Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'GitHubLink
         '
         Me.GitHubLink.AutoSize = True
         Me.GitHubLink.ContextMenuStrip = Me.CopyContextMenu
         Me.GitHubLink.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.GitHubLink.Location = New System.Drawing.Point(279, 135)
+        Me.GitHubLink.Location = New System.Drawing.Point(260, 162)
+        Me.GitHubLink.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.GitHubLink.Name = "GitHubLink"
-        Me.GitHubLink.Size = New System.Drawing.Size(59, 21)
+        Me.GitHubLink.Size = New System.Drawing.Size(75, 28)
         Me.GitHubLink.TabIndex = 10
         Me.GitHubLink.TabStop = True
         Me.GitHubLink.Text = "GitHub"
@@ -117,15 +111,16 @@ Partial Class About
         '
         'CopyContextMenu
         '
+        Me.CopyContextMenu.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.CopyContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
         Me.CopyContextMenu.Name = "ContextMenuStrip1"
-        Me.CopyContextMenu.Size = New System.Drawing.Size(125, 26)
+        Me.CopyContextMenu.Size = New System.Drawing.Size(144, 30)
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Image = Global.lusrmgr.My.Resources.Resources.CopyImg
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(124, 22)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(143, 26)
         Me.CopyToolStripMenuItem.Text = "Copy link"
         '
         'IconCreditsButton
@@ -133,9 +128,10 @@ Partial Class About
         Me.IconCreditsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.IconCreditsButton.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.IconCreditsButton.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.IconCreditsButton.Location = New System.Drawing.Point(254, 177)
+        Me.IconCreditsButton.Location = New System.Drawing.Point(339, 218)
+        Me.IconCreditsButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.IconCreditsButton.Name = "IconCreditsButton"
-        Me.IconCreditsButton.Size = New System.Drawing.Size(99, 29)
+        Me.IconCreditsButton.Size = New System.Drawing.Size(132, 36)
         Me.IconCreditsButton.TabIndex = 11
         Me.IconCreditsButton.Text = "Icon credits"
         Me.IconCreditsButton.UseVisualStyleBackColor = True
@@ -143,20 +139,20 @@ Partial Class About
         'About
         '
         Me.AcceptButton = Me.CloseButton
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.CloseButton
-        Me.ClientSize = New System.Drawing.Size(454, 218)
+        Me.ClientSize = New System.Drawing.Size(605, 268)
         Me.Controls.Add(Me.IconCreditsButton)
         Me.Controls.Add(Me.GitHubLink)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Version)
         Me.Controls.Add(Me.CloseButton)
-        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.DevelopedBy)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Copyright)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "About"
@@ -168,11 +164,10 @@ Partial Class About
 
     End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents DevelopedBy As System.Windows.Forms.Label
     Friend WithEvents CloseButton As System.Windows.Forms.Button
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents Copyright As System.Windows.Forms.Label
+    Friend WithEvents Version As System.Windows.Forms.Label
     Friend WithEvents GitHubLink As System.Windows.Forms.LinkLabel
     Friend WithEvents CopyContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

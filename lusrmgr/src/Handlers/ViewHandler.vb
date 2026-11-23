@@ -141,7 +141,7 @@
                 mainF.list.Columns(1).Text = "Full name"
 
                 For Each User In mainF.ADHandler.currentAD.UserList
-                    Dim iconIndex As Integer = If(mainF.ADHandler.currentAD.IsUserDisabled(User.Key), MainForm.DISABLED_USER_ICON_INDEX, 0)
+                    Dim iconIndex As Integer = If(mainF.ADHandler.currentAD.IsUserDisabled(User.Key), MainForm.EnumIcons.UserDisabled, MainForm.EnumIcons.User)
                     mainF.list.Items.Add(New ListViewItem({User.Key, User.Value}, iconIndex)).Name = User.Key
                 Next
 
