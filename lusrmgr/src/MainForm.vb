@@ -10,10 +10,56 @@ Public Class MainForm
 
     Friend SearchWindow As Search
     Friend Shared ListIcons As ImageList
+    Friend Const DISABLED_USER_ICON_INDEX As Integer = 6
 
     Public Sub New()
         InitializeComponent()
+        EnsureDisabledUserIcon(Icons)
         ListIcons = Icons
+    End Sub
+
+    ''' <summary>
+    ''' Creates a disabled user icon with a red badge overlaid on the base user icon.
+    ''' </summary>
+    Private Shared Sub EnsureDisabledUserIcon(imageList As ImageList)
+        If imageList Is Nothing OrElse imageList.Images.Count = 0 OrElse imageList.Images.Count > DISABLED_USER_ICON_INDEX Then
+            Return
+        End If
+
+        Dim iconSize As Size = imageList.ImageSize
+        Using baseIcon As Image = imageList.Images(0)
+            Using bmp As New Bitmap(iconSize.Width, iconSize.Height, Imaging.PixelFormat.Format32bppArgb)
+                Using g As Graphics = Graphics.FromImage(bmp)
+                    g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                    g.DrawImage(baseIcon, 0, 0, iconSize.Width, iconSize.Height)
+
+                    Dim badgeDiameter As Integer = Math.Max(7, iconSize.Width \ 2)
+                    Dim badgeRect As New Rectangle(
+                        iconSize.Width - badgeDiameter,
+                        iconSize.Height - badgeDiameter,
+                        badgeDiameter - 1,
+                        badgeDiameter - 1)
+
+                    Using borderBrush As New SolidBrush(Color.White)
+                        g.FillEllipse(borderBrush, badgeRect)
+                    End Using
+
+                    Dim innerRect As Rectangle = Rectangle.Inflate(badgeRect, -1, -1)
+                    Using redBrush As New SolidBrush(Color.FromArgb(217, 45, 32))
+                        g.FillEllipse(redBrush, innerRect)
+                    End Using
+
+                    Dim midY As Single = innerRect.Top + innerRect.Height / 2.0F
+                    Using barPen As New Pen(Color.White, Math.Max(1.4F, badgeDiameter / 6.0F))
+                        barPen.StartCap = Drawing2D.LineCap.Round
+                        barPen.EndCap = Drawing2D.LineCap.Round
+                        g.DrawLine(barPen, innerRect.Left + 2.0F, midY, innerRect.Right - 2.0F, midY)
+                    End Using
+                End Using
+
+                imageList.Images.Add("user_disabled.ico", bmp)
+            End Using
+        End Using
     End Sub
 
 #Region "Helper methods"

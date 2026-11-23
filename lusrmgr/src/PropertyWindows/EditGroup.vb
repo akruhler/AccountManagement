@@ -68,7 +68,8 @@ Public Class EditGroup
 
         For Each member As IADs In Igp.Members()
             If member.Class = "User" Then
-                GroupMembers.Items.Add(member.Name, 0)
+                Dim iconIndex As Integer = If(pAD.IsUserDisabled(member.Name), MainForm.DISABLED_USER_ICON_INDEX, 0)
+                GroupMembers.Items.Add(member.Name, iconIndex)
             Else
                 Dim name As String = ""
                 Dim Principal As BuiltInPrincipal = pAD.GetPrincipalBySID(member.GetSID())
@@ -152,7 +153,8 @@ Public Class EditGroup
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         For Each item As ListViewItem In GroupMembers.SelectedItems
 
-            If cfgBool("HideUserWithNoGroupWarning") = 0 AndAlso item.ImageIndex = 0 Then 'Is the warning enabled and the object a User? (ImgIndex==0)
+            Dim isUserMember As Boolean = (item.ImageIndex = 0 OrElse item.ImageIndex = MainForm.DISABLED_USER_ICON_INDEX)
+            If cfgBool("HideUserWithNoGroupWarning") = 0 AndAlso isUserMember Then 'Is the warning enabled and the object a User?
 
                 Dim count As Integer = 0
 
